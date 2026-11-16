@@ -161,3 +161,17 @@ Add `NO_PROXY=api.themoviedb.org,graphql.anilist.co` to keep the metadata APIs o
 - Express.js docs
 - [MDN docs](https://developer.mozilla.org/en-US/docs/Web)
 - [JSDoc docs](https://jsdoc.app/)
+
+## Deploy on Vercel
+
+This repository is configured to run as an Express serverless function on Vercel.
+
+1. Import `bruizr/AnineLatam` from GitHub in the Vercel dashboard.
+2. Keep the project root at the repository root. Vercel detects the Node.js function from `vercel.json`.
+3. In **Settings → Environment Variables**, optionally add `TMDB_API_READ_TOKEN` with your TMDB API Read Access Token. Without it, metadata lookup can fall back to Cinemeta.
+4. Deploy the project.
+5. Test the manifest at `https://YOUR-PROJECT.vercel.app/manifest.json` and install that URL in Stremio.
+
+The addon keeps a short-lived in-memory cache for airing catalogs in warm serverless instances. Vercel instances are temporary, so local JSON cache files and background refresh timers are not treated as persistent storage. A cold instance may fetch airing data from the source sites again.
+
+For local development, run `npm install` and `npm start`. The local server retains its periodic airing-catalog refresh behavior.
