@@ -29,8 +29,8 @@ function ReadManifest() {
     let manifest = {
       "id": 'com.' + packageJSON.name.replaceAll('-', '.'),
       "version": packageJSON.version,
-      "name": "AnineLatam",
-      "logo": "https://raw.githubusercontent.com/bruizr/AnineLatam/main/views/AnineLatam.svg",
+      "name": "AnimeLatam",
+      "logo": "https://raw.githubusercontent.com/bruizr/AnimeLatam/main/views/AnimeLatam.svg",
       "background": "https://images6.alphacoders.com/113/1135890.jpg",
       "description": packageJSON.description,
       "catalogs": [
@@ -402,7 +402,7 @@ app.use(catalog);
 function startLocalServer() {
   const port = process.env.PORT || 3000
   app.listen(port, () => {
-  console.log(`\x1b[32mAnineLatam is listening on port ${port}\x1b[39m`)
+  console.log(`\x1b[32mAnimeLatam is listening on port ${port}\x1b[39m`)
   if (process.argv.includes('--launch')) {
     const OSC = '\u001B]';
     const BEL = '\u0007';
