@@ -1,8 +1,8 @@
-# AnineLatam
+# AnimeLatam
 
 Addon comunitario para **Stremio** enfocado en anime. Reúne catálogos, búsquedas, metadatos y fuentes disponibles a través de los proveedores compatibles.
 
-> **Aviso:** AnineLatam es un proyecto independiente y no está afiliado, patrocinado ni respaldado por AnimeAV1, Henaojara, TioAnime o Latanime. La disponibilidad de los sitios y sus contenidos puede cambiar.
+> **Aviso:** AnimeLatam es un proyecto independiente y no está afiliado, patrocinado ni respaldado por AnimeAV1, Henaojara, TioAnime o Latanime. La disponibilidad de los sitios y sus contenidos puede cambiar.
 
 ## Proveedores
 
@@ -63,7 +63,7 @@ npm run devStart
 
 ## Desarrollo y contribuciones
 
-Los cambios y reportes pueden gestionarse desde [Issues](https://github.com/bruizr/AnineLatam/issues) y [Pull requests](https://github.com/bruizr/AnineLatam/pulls).
+Los cambios y reportes pueden gestionarse desde [Issues](https://github.com/bruizr/AnimeLatam/issues) y [Pull requests](https://github.com/bruizr/AnimeLatam/pulls).
 
 ## Licencia
 
