@@ -30,7 +30,7 @@ function ReadManifest() {
       "id": 'com.' + packageJSON.name.replaceAll('-', '.'),
       "version": packageJSON.version,
       "name": "AnimeLatam",
-      "logo": "https://raw.githubusercontent.com/bruizr/AnimeLatam/main/views/AnimeLatam.svg",
+      "logo": "https://raw.githubusercontent.com/bruizr/AnineLatam/main/views/AnimeLatam.svg",
       "background": "https://images6.alphacoders.com/113/1135890.jpg",
       "description": packageJSON.description,
       "catalogs": [
