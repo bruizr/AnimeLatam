@@ -29,8 +29,8 @@ function ReadManifest() {
     let manifest = {
       "id": 'com.' + packageJSON.name.replaceAll('-', '.'),
       "version": packageJSON.version,
-      "name": "AnimES",
-      "logo": "https://raw.githubusercontent.com/Pigamer37/animeflv-stremio-addon/refs/heads/main/views/AnimES.png",
+      "name": "AnineLatam",
+      "logo": "https://raw.githubusercontent.com/bruizr/AnineLatam/main/views/AnineLatam.svg",
       "background": "https://images6.alphacoders.com/113/1135890.jpg",
       "description": packageJSON.description,
       "catalogs": [
