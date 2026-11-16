@@ -29,11 +29,27 @@ exports.GetAiringAnimeFromWeb = async function () {
   })
 }
 
+// Serverless instances may be short-lived and their filesystem is not persistent.
+// Keep a small per-instance cache to avoid scraping the source on every catalog request.
+let airingMemoryCache
+let airingMemoryCacheAt = 0
+const AIRING_MEMORY_TTL = 5 * 60 * 1000
+
 exports.GetAiringAnime = async function () {
-  return fsPromises.readFile(exports.AiringCacheFile).then((data) => JSON.parse(data)).catch((err) => {
+  if (airingMemoryCache && Date.now() - airingMemoryCacheAt < AIRING_MEMORY_TTL) {
+    return airingMemoryCache
+  }
+
+  try {
+    const data = await fsPromises.readFile(exports.AiringCacheFile)
+    airingMemoryCache = JSON.parse(data)
+  } catch (err) {
     console.error('\x1b[31mFailed reading titles cache:\x1b[39m ' + err)
-    return this.GetAiringAnimeFromWeb() //If the file doesn't exist, get the titles from the web
-  })
+    airingMemoryCache = await this.GetAiringAnimeFromWeb()
+  }
+
+  airingMemoryCacheAt = Date.now()
+  return airingMemoryCache
 }
 
 exports.UpdateAiringAnimeFile = function () {
