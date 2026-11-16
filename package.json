@@ -1,5 +1,5 @@
 {
-  "name": "aninelatam-stremio-addon",
+  "name": "animelatam-stremio-addon",
   "version": "1.5.5",
   "description": "Addon comunitario de Stremio para descubrir anime y consultar fuentes de AnimeAV1, Henaojara, TioAnime y Latanime. Proyecto independiente, no afiliado a esos sitios.",
   "main": "index.js",
@@ -13,17 +13,9 @@
     "type": "git",
     "url": "git+https://github.com/bruizr/AnineLatam.git"
   },
-  "keywords": [
-    "stremio",
-    "anime",
-    "latino",
-    "node.js",
-    "express.js"
-  ],
+  "keywords": ["stremio", "anime", "latino", "node.js", "express.js"],
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/bruizr/AnineLatam/issues"
-  },
+  "bugs": {"url": "https://github.com/bruizr/AnineLatam/issues"},
   "homepage": "https://github.com/bruizr/AnineLatam#readme",
   "dependencies": {
     "cheerio": "^1.1.2",
@@ -33,7 +25,5 @@
     "fuzzysort": "^3.1.0",
     "unpacker": "^1.0.1"
   },
-  "devDependencies": {
-    "nodemon": "^3.1.7"
-  }
+  "devDependencies": {"nodemon": "^3.1.7"}
 }
