@@ -1,5 +1,6 @@
 //npm run devStart
 const express = require("express")
+const path = require("path")
 const app = express()
 
 require("./lib/http.js").Install() //shared cache, per-site limits and a browser User-Agent for every request to the sites
@@ -14,8 +15,9 @@ function setCORS(_req, res, next) {
 }
 app.use(setCORS);
 
-app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, 'public')))
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 const fsPromises = require("fs/promises")
 //Read once at startup: deploys upload files one by one, so reading package.json on every request could catch it
@@ -397,8 +399,10 @@ app.use(meta);
 const catalog = require("./routes/catalog");
 app.use(catalog);
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`\x1b[32manimeflv-stremio-addon is listening on port ${process.env.PORT || 3000}\x1b[39m`)
+function startLocalServer() {
+  const port = process.env.PORT || 3000
+  app.listen(port, () => {
+  console.log(`\x1b[32mAnineLatam is listening on port ${port}\x1b[39m`)
   if (process.argv.includes('--launch')) {
     const OSC = '\u001B]';
     const BEL = '\u0007';
@@ -430,4 +434,11 @@ app.listen(process.env.PORT || 3000, () => {
       }, wait)
     })
   })
-});
+  })
+}
+
+// Vercel imports this Express app as a serverless function. Background refresh timers
+// are intentionally started only for a persistent local server.
+if (require.main === module) startLocalServer()
+
+module.exports = app
