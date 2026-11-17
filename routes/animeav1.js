@@ -17,7 +17,8 @@ exports.GetAiringAnimeFromWeb = async function () {
     if (data?.data === undefined) throw Error("Invalid response!")
     //4 at a time: opening every airing show's page at once gets the addon rate limited (HTTP 429)
     return SettleLimited(data.data, 4, (entry) => {
-      return this.GetAnimeBySlug(entry.slug).then((anime) => {
+      return Promise.all([this.GetAnimeBySlug(entry.slug), GetEpisodeLinks(entry.slug, 1)]).then(([anime, episode]) => {
+        if (!episode?.servers?.some((server) => server.dub === true && server.dubLang === "lat")) return null
         return {
           title: anime.name, type: (anime.type === "Pelicula" || anime.type === "Película" || anime.type === "Especial" || anime.type === "movie") ? "movie" : "series",
           slug: entry.slug, poster: anime.poster, overview: anime.description
@@ -80,12 +81,14 @@ exports.SearchAnimeAV1 = async function (query, type = undefined, genreArr = und
   }).then((data) => {
     if (data?.data?.media === undefined) throw Error("Invalid response!")
     if (data.data.media.length < 1) throw Error("No search results!")
-    return data.data.media.slice(gottenItems).map((anime) => {
+    return SettleLimited(data.data.media, 4, async (anime) => {
+      const episode = await GetEpisodeLinks(anime.slug, 1)
+      if (!episode?.servers?.some((server) => server.dub === true && server.dubLang === "lat")) return null
       return {
         title: anime.title, type: (anime.type === "Pelicula" || anime.type === "Película" || anime.type === "Especial" || anime.type === "movie") ? "movie" : "series",
         slug: anime.slug, poster: anime.cover, overview: anime.synopsis, genres: genreArr
       }
-    })
+    }).then((results) => results.filter((result) => result.value).map((result) => result.value).slice(gottenItems))
   })
 }
 
