@@ -85,7 +85,7 @@ exports.SearchLatanime = async function (query, type = undefined, genreArr = und
   }
   return SearchAnimesBySpecificURL(latanimeURL.toString()).then((data) => {
     if (!data || data.length < 1) throw Error("No search results!")
-    return data.filter((anime) => !type || anime.type === type).slice(gottenItems).map((anime) => ({ ...anime, genres: genreArr }))
+    return data.filter((anime) => anime.dubLang === "lat" && (!type || anime.type === type)).slice(gottenItems).map((anime) => ({ ...anime, genres: genreArr }))
   })
 }
 
@@ -170,6 +170,6 @@ async function SearchAnimesBySpecificURL(latanimeURL) {
 
 async function GetOnAir() {
   return CollectPages((page) => SearchAnimesBySpecificURL(`${LATANIME_BASE}/emision?p=${page}`)).then((data) =>
-    data.map(({ title, type, slug, poster }) => ({ title, type, slug, poster }))
+    data.filter((anime) => anime.dubLang === "lat").map(({ title, type, slug, poster }) => ({ title, type, slug, poster }))
   )
 }
