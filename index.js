@@ -98,22 +98,6 @@ function ReadManifest() {
           { name: "skip", isRequired: false }
           ]
         },
-        {
-          id: "tioanime", type: "TioAnime", name: "search results",
-          extra: [{ name: "search", isRequired: true },
-          {
-            name: "genre",
-            options: ["accion", "artes-marciales", "aventura", "carreras", "ciencia-ficcion", "comedia",
-              "demencia", "demonios", "deportes", "drama", "ecchi", "escolares", "espacial", "fantasia",
-              "harem", "historico", "infantil", "josei", "juegos", "magia", "mecha", "militar", "misterio",
-              "musica", "parodia", "policia", "psicologico", "recuentos-de-la-vida", "romance", "samurai",
-              "seinen", "shoujo", "shounen", "sobrenatural", "superpoderes", "suspenso", "terror", "vampiros",
-              "yaoi", "yuri"],
-            optionsLimit: 1, isRequired: false
-          },
-          { name: "skip", isRequired: false }
-          ]
-        },
         // {
         //   id: "animejara", type: "AnimeJara", name: "search results",
         //   extra: [{ name: "search", isRequired: true },
@@ -210,22 +194,6 @@ function ReadManifest() {
             { name: "skip", isRequired: false }
           ]
         },
-        {
-          id: "tioanime|genres", type: "Anime", name: "TioAnime",
-          extra: [
-            {
-              name: "genre",
-              options: ["accion", "artes-marciales", "aventura", "carreras", "ciencia-ficcion", "comedia",
-                "demencia", "demonios", "deportes", "drama", "ecchi", "escolares", "espacial", "fantasia",
-                "harem", "historico", "infantil", "josei", "juegos", "magia", "mecha", "militar", "misterio",
-                "musica", "parodia", "policia", "psicologico", "recuentos-de-la-vida", "romance", "samurai",
-                "seinen", "shoujo", "shounen", "sobrenatural", "superpoderes", "suspenso", "terror", "vampiros",
-                "yaoi", "yuri"],
-              optionsLimit: 1, isRequired: true
-            },
-            { name: "skip", isRequired: false }
-          ]
-        },
         // {
         //   id: "animejara|genres", type: "Anime", name: "AnimeJara",
         //   extra: [
@@ -266,9 +234,6 @@ function ReadManifest() {
         },
         {
           id: "henaojara|onair", type: "Henaojara", name: "On Air"
-        },
-        {
-          id: "tioanime|onair", type: "TioAnime", name: "On Air"
         },
         {
           id: "latanime|onair", type: "Latanime", name: "On Air"
@@ -314,7 +279,6 @@ function ReadManifest() {
         // "animeflv:",
         "animeav1:",
         "henaojara:",
-        "tioanime:",
         // "animejara:",
         // "jkanime:", //JKAnime answers 403 to the server (#61)
         "latanime:",
@@ -415,11 +379,10 @@ function startLocalServer() {
   // const animeFLVAPI = require('./routes/animeFLV.js')
   const animeAV1API = require('./routes/animeav1.js')
   const henaojaraAPI = require('./routes/henaojara.js')
-  const tioanimeAPI = require('./routes/tioanime.js')
   // const animejaraAPI = require('./routes/animejara.js') // Cloudflare protected
   // const jkanimeAPI = require('./routes/jkanime.js') //JKAnime answers 403 to the server's IP (#61)
   const latanimeAPI = require('./routes/latanime.js')
-  let imports = [/*animeFLVAPI, animejaraAPI,*/ animeAV1API, tioanimeAPI, henaojaraAPI/*, jkanimeAPI*/, latanimeAPI]
+  let imports = [/*animeFLVAPI, animejaraAPI,*/ animeAV1API, henaojaraAPI/*, jkanimeAPI*/, latanimeAPI]
   const REFRESH = 6 * 3600000 //newly airing shows appear within hours
   //When the code is newer than a saved list (a deploy), that list was built by the old code: refresh it right away
   const codeTime = Promise.all(["routes", "lib"].map((dir) => fsPromises.readdir(dir).then((files) =>
