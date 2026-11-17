@@ -33,234 +33,10 @@ function ReadManifest() {
       "logo": "https://raw.githubusercontent.com/bruizr/AnimeLatam/main/views/AnimeLatam.svg",
       "background": "https://images6.alphacoders.com/113/1135890.jpg",
       "description": packageJSON.description,
-      "catalogs": [
-        // {
-        //   id: "animeflv", type: "AnimeFLV", name: "search results",
-        //   extra: [{ name: "search", isRequired: true },
-        //   {
-        //     name: "genre",
-        //     options: ["accion", "artes-marciales", "aventura", "carreras", "ciencia-ficcion", "comedia",
-        //       "demencia", "demonios", "deportes", "drama", "ecchi", "escolares", "espacial", "fantasia",
-        //       "harem", "historico", "infantil", "josei", "juegos", "magia", "mecha", "militar", "misterio",
-        //       "musica", "parodia", "policia", "psicologico", "recuentos-de-la-vida", "romance", "samurai",
-        //       "seinen", "shoujo", "shounen", "sobrenatural", "superpoderes", "suspenso", "terror", "vampiros",
-        //       "yaoi", "yuri"],
-        //     optionsLimit: 1, isRequired: false
-        //   },
-        //   { name: "skip", isRequired: false }
-        //   ]
-        // },
-        {
-          id: "animeav1", type: "anime", name: "search results",
-          extra: [{ name: "search", isRequired: true },
-          {
-            name: "genre",
-            options: ["accion", "artes-marciales", "aventura", "carreras", "ciencia-ficcion", "comedia",
-              "demencia", "demonios", "deportes", "drama", "ecchi", "escolares", "espacial", "fantasia",
-              "harem", "historico", "infantil", "josei", "juegos", "magia", "mecha", "militar", "misterio",
-              "musica", "parodia", "policia", "psicologico", "recuentos-de-la-vida", "romance", "samurai",
-              "seinen", "shoujo", "shounen", "sobrenatural", "superpoderes", "suspenso", "terror", "vampiros",
-              "yaoi", "yuri"],
-            optionsLimit: 1, isRequired: false
-          },
-          { name: "skip", isRequired: false }
-          ]
-        },
-        {
-          id: "henaojara", type: "anime", name: "search results",
-          extra: [{ name: "search", isRequired: true },
-          {
-            name: "genre",
-            options: ["accion", "aenime", "anime-latino", "artes-marciales", "aventura", "aventuras", "blu-ray",
-              "carreras", "castellano", "ciencia-ficcion", "comedia", "comida", "cyberpunk", "demencia", "dementia",
-              "demonios", "deportes", "drama", "ecchi", "escolares", "escuela", "espacial", "fantasia", "gore",
-              "harem", "historia-paralela", "historico", "horror", "infantil", "josei", "juegos", "latino", "lucha",
-              "magia", "mecha", "militar", "misterio", "monogatari", "musica", "parodia", "parodias", "policia",
-              "psicologico", "recuentos-de-la-vida", "recuerdos-de-la-vida", "romance", "samurai", "seinen", "shojo",
-              "shonen", "shoujo", "shounen", "shounen-ai", "sobrenatural", "superpoderes", "suspenso", "terror", "vampiros", "yaoi", "yuri"],
-            optionsLimit: 1, isRequired: false
-          },
-          { name: "skip", isRequired: false }
-          ]
-        },
-        {
-          id: "latanime", type: "anime", name: "search results",
-          extra: [{ name: "search", isRequired: true },
-          {
-            name: "genre",
-            options: ["accion", "aventura", "carreras", "ciencia-ficcion", "comedia", "cyberpunk", "deportes", "drama",
-              "ecchi", "escolares", "fantasia", "gore", "harem", "horror", "josei", "lucha", "magia", "mecha", "militar",
-              "misterio", "musica", "parodias", "psicologico", "recuerdos-de-la-vida", "seinen", "shojo", "shonen",
-              "sobrenatural", "vampiros", "yaoi", "yuri", "latino", "espacial", "historico", "samurai", "artes-marciales",
-              "demonios", "romance", "dementia", "policia", "castellano", "historia-paralela", "donghua", "suspenso", "isekai"],
-            optionsLimit: 1, isRequired: false
-          },
-          { name: "skip", isRequired: false }
-          ]
-        },
-        // {
-        //   id: "animejara", type: "AnimeJara", name: "search results",
-        //   extra: [{ name: "search", isRequired: true },
-        //   {
-        //     name: "genre",
-        //     options: ["Accion", "Amor", "Artes marciales", "Aventura", "Carreras", "Ciencia ficcion",
-        //       "Comedia", "Crimen", "Demonios", "Deportes", "Drama", "Ecchi", "Escolar", "Espacial", "Espadachin",
-        //       "Familia", "Fantasia", "Gore", "Harem", "Historico", "Isekai", "Josei", "Juegos", "Magia", "Mecha",
-        //       "Militar", "Misterio", "Musica", "Parodia", "Psicologico", "Recuerdos", "Robots", "Romance",
-        //       "Samurai", "Seinen", "Shoujo", "Shounen", "Sobrenatural", "Studio ghibli", "Superpoderes",
-        //       "Suspenso", "Terror", "Vampiros", "Yaoi", "Yuri", "Zombies"
-        //     ],
-        //     optionsLimit: 1, isRequired: false
-        //   },
-        //   { name: "skip", isRequired: false }
-        //   ]
-        // },
-        // {
-        //   id: "jkanime", type: "JKAnime", name: "search results",
-        //   extra: [{ name: "search", isRequired: true },
-        //   {
-        //     name: "genre",
-        //     options: ["accion", "aventura", "autos", "comedia", "dementia", "demonios", "misterio", "drama",
-        //       "ecchi", "fantasia", "juegos", "hentai", "historico", "terror", "nios", "magia", "artes-marciales",
-        //       "mecha", "musica", "parodia", "samurai", "romance", "colegial", "sci-fi", "shoujo", "shoujo-ai",
-        //       "shounen", "shounen-ai", "space", "deportes", "super-poderes", "vampiros", "yaoi", "yuri", "harem",
-        //       "cosas-de-la-vida", "sobrenatural", "militar", "policial", "psicologico", "thriller", "seinen", "josei", "latino", "isekai"],
-        //     optionsLimit: 1, isRequired: false
-        //   },
-        //   { name: "skip", isRequired: false }
-        //   ]
-        // },
-        // {
-        //   id: "animeflv|genres", type: "anime", name: "AnimeFLV",
-        //   extra: [
-        //     {
-        //       name: "genre",
-        //       options: ["accion", "artes-marciales", "aventura", "carreras", "ciencia-ficcion", "comedia",
-        //         "demencia", "demonios", "deportes", "drama", "ecchi", "escolares", "espacial", "fantasia",
-        //         "harem", "historico", "infantil", "josei", "juegos", "magia", "mecha", "militar", "misterio",
-        //         "musica", "parodia", "policia", "psicologico", "recuentos-de-la-vida", "romance", "samurai",
-        //         "seinen", "shoujo", "shounen", "sobrenatural", "superpoderes", "suspenso", "terror", "vampiros",
-        //         "yaoi", "yuri"],
-        //       optionsLimit: 1, isRequired: true
-        //     },
-        //     { name: "skip", isRequired: false }
-        //   ]
-        // },
-        {
-          id: "animeav1|genres", type: "anime", name: "AnimeAV1",
-          extra: [
-            {
-              name: "genre",
-              options: ["accion", "artes-marciales", "aventura", "carreras", "ciencia-ficcion", "comedia",
-                "demencia", "demonios", "deportes", "drama", "ecchi", "escolares", "espacial", "fantasia",
-                "harem", "historico", "infantil", "josei", "juegos", "magia", "mecha", "militar", "misterio",
-                "musica", "parodia", "policia", "psicologico", "recuentos-de-la-vida", "romance", "samurai",
-                "seinen", "shoujo", "shounen", "sobrenatural", "superpoderes", "suspenso", "terror", "vampiros",
-                "yaoi", "yuri"],
-              optionsLimit: 1, isRequired: true
-            },
-            { name: "skip", isRequired: false }
-          ]
-        },
-        {
-          id: "henaojara|genres", type: "anime", name: "Henaojara",
-          extra: [
-            {
-              name: "genre",
-              options: ["accion", "aenime", "anime-latino", "artes-marciales", "aventura", "aventuras", "blu-ray",
-                "carreras", "castellano", "ciencia-ficcion", "comedia", "comida", "cyberpunk", "demencia", "dementia",
-                "demonios", "deportes", "drama", "ecchi", "escolares", "escuela", "espacial", "fantasia", "gore",
-                "harem", "historia-paralela", "historico", "horror", "infantil", "josei", "juegos", "latino", "lucha",
-                "magia", "mecha", "militar", "misterio", "monogatari", "musica", "parodia", "parodias", "policia",
-                "psicologico", "recuentos-de-la-vida", "recuerdos-de-la-vida", "romance", "samurai", "seinen", "shojo",
-                "shonen", "shoujo", "shounen", "shounen-ai", "sobrenatural", "superpoderes", "suspenso", "terror", "vampiros", "yaoi", "yuri"],
-              optionsLimit: 1, isRequired: true
-            },
-            { name: "skip", isRequired: false }
-          ]
-        },
-        {
-          id: "latanime|genres", type: "anime", name: "Latanime",
-          extra: [
-            {
-              name: "genre",
-              options: ["accion", "aventura", "carreras", "ciencia-ficcion", "comedia", "cyberpunk", "deportes", "drama",
-                "ecchi", "escolares", "fantasia", "gore", "harem", "horror", "josei", "lucha", "magia", "mecha", "militar",
-                "misterio", "musica", "parodias", "psicologico", "recuerdos-de-la-vida", "seinen", "shojo", "shonen",
-                "sobrenatural", "vampiros", "yaoi", "yuri", "latino", "espacial", "historico", "samurai", "artes-marciales",
-                "demonios", "romance", "dementia", "policia", "castellano", "historia-paralela", "donghua", "suspenso", "isekai"],
-              optionsLimit: 1, isRequired: true
-            },
-            { name: "skip", isRequired: false }
-          ]
-        },
-        // {
-        //   id: "animejara|genres", type: "anime", name: "AnimeJara",
-        //   extra: [
-        //     {
-        //       name: "genre",
-        //       options: ["Accion", "Amor", "Artes marciales", "Aventura", "Carreras", "Ciencia ficcion",
-        //         "Comedia", "Crimen", "Demonios", "Deportes", "Drama", "Ecchi", "Escolar", "Espacial", "Espadachin",
-        //         "Familia", "Fantasia", "Gore", "Harem", "Historico", "Isekai", "Josei", "Juegos", "Magia", "Mecha",
-        //         "Militar", "Misterio", "Musica", "Parodia", "Psicologico", "Recuerdos", "Robots", "Romance",
-        //         "Samurai", "Seinen", "Shoujo", "Shounen", "Sobrenatural", "Studio ghibli", "Superpoderes",
-        //         "Suspenso", "Terror", "Vampiros", "Yaoi", "Yuri", "Zombies"
-        //       ],
-        //       optionsLimit: 1, isRequired: true
-        //     },
-        //     { name: "skip", isRequired: false }
-        //   ]
-        // },
-        // {
-        //   id: "jkanime|genres", type: "anime", name: "JKAnime",
-        //   extra: [
-        //     {
-        //       name: "genre",
-        //       options: ["accion", "aventura", "autos", "comedia", "dementia", "demonios", "misterio", "drama",
-        //         "ecchi", "fantasia", "juegos", "hentai", "historico", "terror", "nios", "magia", "artes-marciales",
-        //         "mecha", "musica", "parodia", "samurai", "romance", "colegial", "sci-fi", "shoujo", "shoujo-ai",
-        //         "shounen", "shounen-ai", "space", "deportes", "super-poderes", "vampiros", "yaoi", "yuri", "harem",
-        //         "cosas-de-la-vida", "sobrenatural", "militar", "policial", "psicologico", "thriller", "seinen", "josei", "latino", "isekai"],
-        //       optionsLimit: 1, isRequired: true
-        //     },
-        //     { name: "skip", isRequired: false }
-        //   ]
-        // },
-        // {
-        //   id: "animeflv|onair", type: "AnimeFLV", name: "On Air"
-        // },
-        {
-          id: "latino-onair", type: "anime", name: "En emisión · Español latino"
-        },
-        // {
-        //   id: "animejara|onair", type: "AnimeJara", name: "On Air"
-        // },
-        // {
-        //   id: "jkanime|onair", type: "JKAnime", name: "On Air"
-        // },
-        {
-          type: "series",
-          id: "calendar-videos",
-          extra: [
-            {
-              name: "calendarVideosIds",
-              isRequired: true,
-              optionsLimit: 15
-            }
-          ],
-          extraSupported: [
-            "calendarVideosIds"
-          ],
-          extraRequired: [
-            "calendarVideosIds"
-          ],
-          name: "Calendar videos"
-        }
-      ],
+      "catalogs": [],
       "resources": [
         "stream",
-        { name: 'meta', types: ['movie', 'series', 'anime', 'other'], idPrefixes: [ /*"animeflv:",*/"animeav1:","henaojara:",/*"animejara:",*/ /*"jkanime:",*/"latanime:","anilist:","mal:","anidb:"] },
-        "catalog"
+        { name: "meta", types: ["movie", "series", "anime", "other"], idPrefixes: ["animeav1:", "henaojara:", "latanime:", "anilist:", "mal:", "anidb:"] }
       ],
       "types": [
         "movie",
@@ -297,37 +73,12 @@ function ReadManifest() {
 
 app.get("/manifest.json", (_req, res) => {
   ReadManifest().then((manif) => {
-    manif.catalogs = manif.catalogs.filter((cat) => cat.id !== "latino-onair")
-    res.header('Cache-Control', "max-age=86400, stale-while-revalidate=86400, stale-if-error=259200")
+    res.header("Cache-Control", "max-age=86400, stale-while-revalidate=86400, stale-if-error=259200");
     res.json(manif);
   }).catch((err) => {
-    if(!res.headersSent) res.status(500).header("Cache-Control", "no-store").send("Error reading file: " + err) //errors must not be cached by proxies;
-  })
-})
-
-app.get("/:config/manifest.json", (req, res) => {
-  ReadManifest().then((manif) => {
-    const config = new URLSearchParams(decodeURIComponent(req.params.config))
-    const catalogProviders = config.has("catalogProviders")
-      ? config.get("catalogProviders").split(',').filter(Boolean)
-      : ["animeav1", "henaojara", "latanime"]
-    const includeLatinoOnAir = config.get("latinoOnAir") === "true"
-    manif.catalogs = manif.catalogs.filter((cat) => {
-      if (cat.id === "latino-onair") return includeLatinoOnAir
-      const provider = cat.id.split("|")[0]
-      if (["animeav1", "henaojara", "latanime"].includes(provider) && !catalogProviders.includes(provider)) return false
-      return true
-    })
-    res.header('Cache-Control', "max-age=86400, stale-while-revalidate=86400, stale-if-error=259200")
-    res.json(manif);
-  }).catch((err) => {
-    if(!res.headersSent) res.status(500).header("Cache-Control", "no-store").send("Error reading file: " + err) //errors must not be cached by proxies;
-  })
-})
-
-app.get('/', (req, res) => {
-  res.redirect('/configure')
-})
+    if (!res.headersSent) res.status(500).header("Cache-Control", "no-store").send("Error reading file: " + err);
+  });
+});
 
 app.get("/configure", (req, res) => {
   ReadManifest().then((manif) => {
@@ -357,8 +108,6 @@ app.use(streams);
 const meta = require("./routes/meta");
 app.use(meta);
 
-const catalog = require("./routes/catalog");
-app.use(catalog);
 
 function startLocalServer() {
   const port = process.env.PORT || 3000
