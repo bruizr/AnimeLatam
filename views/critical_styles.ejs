@@ -32,6 +32,11 @@ body{min-height:100vh;background:radial-gradient(ellipse at 50% -15%,#25214a 0,t
 .section-kicker{display:block;margin-bottom:9px;color:#9d91ed;font-size:9px;font-weight:800;letter-spacing:2px}
 .section-heading h2{margin:0 0 7px;font-size:19px;letter-spacing:-.4px}
 .section-heading p,.credits-section>p{margin:0 0 18px;color:var(--muted);font-size:12px;line-height:1.7}
+.install-steps{display:grid;gap:12px;margin:0;padding:0;list-style:none;counter-reset:install}
+.install-steps li{display:flex;flex-direction:column;gap:5px;padding:14px 16px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.025);counter-increment:install}
+.install-steps li strong{font-size:12px;color:#f4f4ff}
+.install-steps li span{font-size:11px;line-height:1.65;color:var(--muted)}
+.nuvio-note{margin:14px 0 0;padding:12px 14px;border-left:2px solid var(--cyan);background:rgba(112,216,237,.055);color:#aebbd0;font-size:11px;line-height:1.7}
 .source-logos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .source-logo{position:relative;min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px 10px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.025);color:#f4f4ff;text-decoration:none;transition:transform .18s,border-color .18s,background .18s}
 .source-logo:hover{transform:translateY(-3px);border-color:rgba(155,140,255,.55);background:rgba(155,140,255,.07)}
