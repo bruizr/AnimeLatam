@@ -157,7 +157,7 @@ async function buildCatalog() {
     try { tvdb = await searchTVDB(node); }
     catch (error) { console.warn("TVDB lookup failed for " + node.title + ":", error.message); }
     return {
-      id: source.id,
+      id: "mal:" + node.id,
       type: "anime",
       name: node.title || source.title,
       poster: (tvdb && tvdb.image_url) || (node.main_picture && (node.main_picture.large || node.main_picture.medium)) || source.poster,
