@@ -1,6 +1,6 @@
 {
   "name": "animelatam-stremio-addon",
-  "version": "1.5.5",
+  "version": "1.5.6",
   "description": "Addon comunitario de Stremio para descubrir anime y consultar fuentes de AnimeAV1, Henaojara y Latanime. Proyecto independiente, no afiliado a esos sitios.",
   "main": "index.js",
   "scripts": {
