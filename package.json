@@ -11,12 +11,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bruizr/AnineLatam.git"
+    "url": "git+https://github.com/bruizr/AnimeLatam.git"
   },
   "keywords": ["stremio", "anime", "latino", "node.js", "express.js"],
   "license": "MIT",
-  "bugs": {"url": "https://github.com/bruizr/AnineLatam/issues"},
-  "homepage": "https://github.com/bruizr/AnineLatam#readme",
+  "bugs": {"url": "https://github.com/bruizr/AnimeLatam/issues"},
+  "homepage": "https://github.com/bruizr/AnimeLatam#readme",
   "dependencies": {
     "cheerio": "^1.1.2",
     "dotenv": "^16.5.0",
