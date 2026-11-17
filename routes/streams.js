@@ -51,13 +51,11 @@ function HandleStreamRequest(req, res, next) {
     let season
     console.log(`\x1b[33mGot a ${req.params.type} with ${videoID} ID:\x1b[39m ${ID}`)
     console.log('Extra parameters:', res.locals.extraParams)
-    // const animeFLVp = animeFLVAPI.GetItemStreams(ID, onlyInternal, episode) //Original domain down
-    const animeAV1p = animeAV1API.GetItemStreams(ID, onlyInternal, episode)
-    const henaojarap = henaojaraAPI.GetItemStreams(ID, onlyInternal, episode)
-    // const animejarap = animejaraAPI.GetItemStreams(ID, onlyInternal, season, episode) //Cloudflare protected
-    // const jkanimep = jkanimeAPI.GetItemStreams(ID, onlyInternal, episode) //JKAnime answers 403 to the server's IP (#61)
-    const latanimep = latanimeAPI.GetItemStreams(ID, onlyInternal, episode)
-    CombineStreams({ AnimeAV1: animeAV1p, Henaojara: henaojarap, Latanime: latanimep }).then((combinedStreams)=>{
+    const sourcePromises = {}
+    if (configuredProviders.includes("animeav1") && videoID === "animeav1") sourcePromises.AnimeAV1 = animeAV1API.GetItemStreams(ID, onlyInternal, episode)
+    if (configuredProviders.includes("henaojara") && videoID === "henaojara") sourcePromises.Henaojara = henaojaraAPI.GetItemStreams(ID, onlyInternal, episode)
+    if (configuredProviders.includes("latanime") && videoID === "latanime") sourcePromises.Latanime = latanimeAPI.GetItemStreams(ID, onlyInternal, episode)
+    CombineStreams(sourcePromises).then((combinedStreams)=>{
       if (combinedStreams.length > 0) {
         console.log(`\x1b[36mGot ${combinedStreams.length} streams\x1b[39m`)
         res.header('Cache-Control', CLIENT_CACHE.streams)
@@ -160,23 +158,30 @@ function HandleStreamRequest(req, res, next) {
       //   console.log('\x1b[36mGot AnimeFLV entry:\x1b[39m', result.title)
       //   return animeFLVAPI.GetItemStreams(result.slug, onlyInternal, episode)
       // })
-      const animeAV1p = firstMatch((searchTerm) => animeAV1API.SearchAnimeAV1(searchTerm, req.params.type).then(notSpecial).then((animeFLVitem) => {
+      const animeAV1p = configuredProviders.includes("animeav1") ? firstMatch((searchTerm) => animeAV1API.SearchAnimeAV1(searchTerm, req.params.type).then(notSpecial).then((animeFLVitem) => {
         const result = fuzzysort.go(searchTerm, animeFLVitem, {key: 'title', limit: 1, threshold: .5})[0]?.obj;
         if (!result) throw Error('No search results!')
         console.log('\x1b[36mGot AnimeAV1 entry:\x1b[39m', result.title)
         return animeAV1API.GetItemStreams(result.slug, onlyInternal, episode)
-      }))
+      })) : Promise.resolve([])
       //Henaojara lists every season, movie and dub as its own entry: keep only the ones that can be the requested one
       //(same type, no "Season/Part N" of another season), fuzzy match among them, and don't fall back to the first result
       const sameSeason = (title) => { const n = title.match(/\b(?:season|temporada|part|parte)\s*(\d+)/i)?.[1]; return !n || parseInt(n) === (parseInt(season) || 1) }
-      const henaojarap = firstMatch((searchTerm) => henaojaraAPI.SearchHenaojara(searchTerm).then(notSpecial).then((animeFLVitem) => {
+      const henaojarap = configuredProviders.includes("henaojara") ? firstMatch((searchTerm) => henaojaraAPI.SearchHenaojara(searchTerm).then(notSpecial).then((animeFLVitem) => {
         const candidates = animeFLVitem.filter((i) => (!i.type || i.type === req.params.type) && sameSeason(i.title))
         const result = fuzzysort.go(searchTerm, candidates, {key: 'title', limit: 1, threshold: .5})[0]?.obj;
         if (!result) throw Error('No search results!')
         console.log('\x1b[36mGot Henaojara entry:\x1b[39m', result.title)
         return henaojaraAPI.GetItemStreams(result.slug, onlyInternal, episode)
-      }))
-    })).catch((err) => {
+      })) : Promise.resolve([])
+      return Promise.allSettled([animeAV1p, henaojarap]).then((results) => results.flatMap((result) => result.status === "fulfilled" ? result.value : []))
+    })).then((foundStreams) => {
+      if (!res.headersSent) {
+        res.header('Cache-Control', foundStreams.length ? CLIENT_CACHE.streams : CLIENT_CACHE.failure)
+        res.json({ streams: foundStreams, message: foundStreams.length ? "Got streams!" : "Failed getting streams" })
+        next()
+      }
+    }).catch((err) => {
       console.error('\x1b[31mFailed on metadata search because:\x1b[39m ' + err)
       if (!res.headersSent) {
         res.header('Cache-Control', CLIENT_CACHE.failure)
