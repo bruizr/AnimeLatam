@@ -51,7 +51,7 @@ function ReadManifest() {
         //   ]
         // },
         {
-          id: "animeav1", type: "AnimeAV1", name: "search results",
+          id: "animeav1", type: "anime", name: "search results",
           extra: [{ name: "search", isRequired: true },
           {
             name: "genre",
@@ -67,7 +67,7 @@ function ReadManifest() {
           ]
         },
         {
-          id: "henaojara", type: "Henaojara", name: "search results",
+          id: "henaojara", type: "anime", name: "search results",
           extra: [{ name: "search", isRequired: true },
           {
             name: "genre",
@@ -84,7 +84,7 @@ function ReadManifest() {
           ]
         },
         {
-          id: "latanime", type: "Latanime", name: "search results",
+          id: "latanime", type: "anime", name: "search results",
           extra: [{ name: "search", isRequired: true },
           {
             name: "genre",
@@ -230,13 +230,13 @@ function ReadManifest() {
         //   id: "animeflv|onair", type: "AnimeFLV", name: "On Air"
         // },
         {
-          id: "animeav1|onair", type: "AnimeAV1", name: "On Air"
+          id: "animeav1|onair", type: "anime", name: "On Air"
         },
         {
-          id: "henaojara|onair", type: "Henaojara", name: "On Air"
+          id: "henaojara|onair", type: "anime", name: "On Air"
         },
         {
-          id: "latanime|onair", type: "Latanime", name: "On Air"
+          id: "latanime|onair", type: "anime", name: "On Air"
         },
         // {
         //   id: "animejara|onair", type: "AnimeJara", name: "On Air"
