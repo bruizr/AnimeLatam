@@ -15,6 +15,16 @@ En la página de configuración encontrarás:
 2. **Copiar manifest:** copia la dirección del manifiesto para instalarlo manualmente o pegarla en Stremio.
 3. La dirección del manifest, para que puedas consultarla y copiarla cuando lo necesites.
 
+## Instalar en Nuvio
+
+AnimeLatam utiliza el protocolo estándar de complementos de Stremio, que también es compatible con Nuvio. Puedes instalar el mismo manifest; no necesitas una versión distinta del addon.
+
+1. Copia esta URL: [https://anine-latam.vercel.app/manifest.json](https://anine-latam.vercel.app/manifest.json).
+2. Abre Nuvio y entra en **Ajustes → Addons → Añadir addon**. En Android TV, puedes abrir **Addons** desde el menú lateral.
+3. Pega la URL del manifest y confirma la instalación.
+
+La opción **Agregar a Stremio** de la página Configure abre Stremio. Para Nuvio debes pegar el manifest dentro de su sección de Addons.
+
 ## Fuentes de reproducción
 
 AnimeLatam consulta automáticamente estas plataformas:
