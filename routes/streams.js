@@ -9,7 +9,6 @@ const CLIENT_CACHE = require('../lib/clientCache.js')
 // const animeFLVAPI = require('./animeFLV.js')
 const animeAV1API = require('./animeav1.js')
 const henaojaraAPI = require('./henaojara.js')
-const tioanimeAPI = require('./tioanime.js')
 // const animejaraAPI = require('./animejara.js')
 // const jkanimeAPI = require('./jkanime.js')
 const latanimeAPI = require('./latanime.js')
@@ -46,24 +45,19 @@ function HandleStreamRequest(req, res, next) {
   let streams = []
   const idDetails = req.params.videoId.split(':')
   const videoID = idDetails[0] //We only want the first part of the videoID, which is the IMDB ID, the rest would be the season and episode
-  if (/*(videoID?.startsWith("animeflv")) || */(videoID?.startsWith("animeav1")) || (videoID?.startsWith("henaojara")) || (videoID?.startsWith("tioanime")) || (videoID?.startsWith("animejara")) /*|| (videoID?.startsWith("jkanime"))*/ || (videoID?.startsWith("latanime"))) { //If we got an AnimeFLV or AnimeAV1 specific ID
+  if (/*(videoID?.startsWith("animeflv")) || */(videoID?.startsWith("animeav1")) || (videoID?.startsWith("henaojara")) /*|| (videoID?.startsWith("jkanime"))*/ || (videoID?.startsWith("latanime"))) { //If we got an AnimeFLV or AnimeAV1 specific ID
     const ID = idDetails[1] //We want the second part of the videoID
     let episode = idDetails[2] //undefined if we don't get an episode number in the query, which is fine
     let season
-    if(videoID?.startsWith("animejara")){
-      season = idDetails[2]
-      episode = idDetails[3]
-    }
     console.log(`\x1b[33mGot a ${req.params.type} with ${videoID} ID:\x1b[39m ${ID}`)
     console.log('Extra parameters:', res.locals.extraParams)
     // const animeFLVp = animeFLVAPI.GetItemStreams(ID, onlyInternal, episode) //Original domain down
     const animeAV1p = animeAV1API.GetItemStreams(ID, onlyInternal, episode)
     const henaojarap = henaojaraAPI.GetItemStreams(ID, onlyInternal, episode)
-    const tioanimep = tioanimeAPI.GetItemStreams(ID, onlyInternal, episode)
     // const animejarap = animejaraAPI.GetItemStreams(ID, onlyInternal, season, episode) //Cloudflare protected
     // const jkanimep = jkanimeAPI.GetItemStreams(ID, onlyInternal, episode) //JKAnime answers 403 to the server's IP (#61)
     const latanimep = latanimeAPI.GetItemStreams(ID, onlyInternal, episode)
-    CombineStreams({ /*AnimeFLV: animeFLVp, */AnimeAV1: animeAV1p, Henaojara: henaojarap, TioAnime: tioanimep, /*AnimeJara: animejarap, JKAnime: jkanimep, */Latanime: latanimep }).then((combinedStreams)=>{
+    CombineStreams({ AnimeAV1: animeAV1p, Henaojara: henaojarap, Latanime: latanimep }).then((combinedStreams)=>{
       if (combinedStreams.length > 0) {
         console.log(`\x1b[36mGot ${combinedStreams.length} streams\x1b[39m`)
         res.header('Cache-Control', CLIENT_CACHE.streams)
@@ -182,55 +176,6 @@ function HandleStreamRequest(req, res, next) {
         console.log('\x1b[36mGot Henaojara entry:\x1b[39m', result.title)
         return henaojaraAPI.GetItemStreams(result.slug, onlyInternal, episode)
       }))
-      const tioanimep = firstMatch((searchTerm) => tioanimeAPI.SearchTioAnime(searchTerm, req.params.type).then(notSpecial).then((animeFLVitem) => {
-        const result = fuzzysort.go(searchTerm, animeFLVitem, {key: 'title', limit: 1, threshold: .5})[0]?.obj; //no first-result fallback: it served another show's streams
-        if (!result) throw Error('No search results!')
-        console.log('\x1b[36mGot TioAnime entry:\x1b[39m', result.title)
-        return tioanimeAPI.GetItemStreams(result.slug, onlyInternal, episode)
-      }))
-      // const animejarap = animejaraAPI.SearchAnimeJara(searchTerm, req.params.type).then((animeFLVitem) => {
-      //   const result = fuzzysort.go(searchTerm, animeFLVitem, {key: 'title', limit: 1})[0]?.obj || animeFLVitem[0];
-      //   console.log('\x1b[36mGot AnimeJara entry:\x1b[39m', result.title)
-      //   return animejaraAPI.GetItemStreams(result.slug, onlyInternal, season, episode)
-      // })
-      // const jkanimep = firstMatch((searchTerm) => jkanimeAPI.SearchJKAnime(searchTerm).then(notSpecial).then((animeFLVitem) => {
-        // const result = fuzzysort.go(searchTerm, animeFLVitem, {key: 'title', limit: 1, threshold: .5})[0]?.obj;
-        // if (!result) throw Error('No search results!')
-        // console.log('\x1b[36mGot JKAnime entry:\x1b[39m', result.title)
-        // return jkanimeAPI.GetItemStreams(result.slug, onlyInternal, episode)
-      // }))
-      //Latanime lists the sub, Latino and Castellano versions as separate entries, with inconsistent season naming
-      //("X S2 Latino", "X 2 Castellano"): entries of the requested season are matched by base title (fuzzy matched like
-      //the other sources when none is exact) and the streams of every version of the match are merged. Its search is
-      //literal ("X 2" doesn't find "X S2"), so the base title is searched
-      const latanimep = firstMatch((searchTerm) => latanimeAPI.SearchLatanime(searchTerm.replace(/\s+\d{1,2}$/, ""), req.params.type).then(notSpecial).then((animeFLVitem) => {
-        const { key, base } = latanimeAPI.ParseTitle(searchTerm)
-        const candidates = animeFLVitem.filter((i) => i.key.split("|")[1] === key.split("|")[1] && i.dubLang !== "cat") //Catalan dubs would be labelled as Castilian
-        const best = candidates.find((i) => i.key === key) || fuzzysort.go(base, candidates, {key: 'base', limit: 1, threshold: .5})[0]?.obj
-        if (!best) throw Error('No search results!')
-        const results = candidates.filter((i) => i.key === best.key)
-        console.log('\x1b[36mGot Latanime entries:\x1b[39m', results.map((r) => r.title).join(", "))
-        return Promise.allSettled(results.map((r) => latanimeAPI.GetItemStreams(r.slug, onlyInternal, episode, r.title))).then((all) => {
-          const streams = all.filter((p) => p.value).flatMap((p) => p.value)
-          if (streams.length < 1) throw Error('No streams!')
-          return streams
-        })
-      }))
-      const apotoxinp = apotoxinAPI.SearchApotoxin(metadata.imdbID, req.params.type, season, episode, onlyInternal)
-      CombineStreams({ /*AnimeFLV: animeFLVp, */AnimeAV1: animeAV1p, Henaojara: henaojarap, TioAnime: tioanimep, /*AnimeJara: animejarap, JKAnime: jkanimep, */Latanime: latanimep, Apotoxin: apotoxinp }).then((combinedStreams)=>{
-        if (combinedStreams.length > 0) {
-          console.log(`\x1b[36mGot ${combinedStreams.length} streams\x1b[39m`)
-          res.header('Cache-Control', CLIENT_CACHE.streams)
-          res.json({ streams: combinedStreams, message: "Got streams!" })
-          next()
-        } else {
-          if (!res.headersSent) {
-            res.header('Cache-Control', CLIENT_CACHE.failure)
-            res.json({ streams, message: "Failed getting streams" });
-            next()
-          }
-        }
-      })
     })).catch((err) => {
       console.error('\x1b[31mFailed on metadata search because:\x1b[39m ' + err)
       if (!res.headersSent) {
