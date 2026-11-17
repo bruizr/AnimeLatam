@@ -2,7 +2,7 @@
 
 Addon comunitario para **Stremio** enfocado en anime con fuentes de reproducción identificadas como **audio español latino**.
 
-AnimeLatam es una adaptación independiente basada en el proyecto original **AnimES Stremio addon**, creado por **Lucas Gómez (KB)**. Se conserva el reconocimiento al autor original y la licencia MIT del proyecto base.
+AnimeLatam es una adaptación independiente basada en el proyecto original **AnimES Stremio addon**. Se mantienen la licencia MIT y los avisos de copyright correspondientes al proyecto base.
 
 > **Importante:** AnimeLatam no está afiliado, patrocinado ni respaldado por Stremio, AnimeAV1, Henaojara, Latanime ni otros sitios externos. Los nombres y marcas pertenecen a sus respectivos propietarios. La disponibilidad y el funcionamiento de las fuentes dependen de servicios de terceros.
 
@@ -10,12 +10,11 @@ AnimeLatam es una adaptación independiente basada en el proyecto original **Ani
 
 Este repositorio es un fork/adaptación del trabajo de:
 
-- **Autor original:** Lucas Gómez (KB)
 - **Proyecto original:** [Pigamer37/animeflv-stremio-addon](https://github.com/Pigamer37/animeflv-stremio-addon)
 - **Nombre original:** AnimES Stremio addon
 - **Licencia original:** MIT
 
-Gracias a Lucas Gómez (KB) por desarrollar y compartir la base del addon, incluyendo la integración con Stremio, la estructura de catálogos, metadatos y streams. AnimeLatam conserva esa base y añade modificaciones propias, entre ellas el enfoque en fuentes con audio español latino y la selección de proveedores activos.
+Este repositorio conserva la base del addon original, incluyendo la integración con Stremio, la estructura de catálogos, metadatos y streams. AnimeLatam añade modificaciones propias, entre ellas el enfoque en fuentes con audio español latino y la selección de proveedores activos.
 
 ## Proveedores y fuentes
 
@@ -105,8 +104,4 @@ Al contribuir, respeta la licencia del proyecto original y los avisos de copyrig
 
 ## Licencia
 
-Este proyecto se distribuye bajo la **Licencia MIT**. Se conserva el aviso de copyright del código base original:
-
-**Copyright (c) 2024 Lucas Gómez (KB)**
-
-Consulta el archivo [LICENSE](LICENSE) para leer el texto completo de la licencia. Las modificaciones realizadas para AnimeLatam no eliminan ni sustituyen la atribución al autor original.
+Este proyecto se distribuye bajo la **Licencia MIT**. Se conserva el aviso de copyright incluido en la licencia del código base original. Consulta el archivo [LICENSE](LICENSE) para leer el texto completo de la licencia. Las modificaciones realizadas para AnimeLatam no eliminan ni sustituyen los avisos legales originales.
