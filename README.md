@@ -25,6 +25,14 @@ AnimeLatam utiliza el protocolo estándar de complementos de Stremio, que tambi�
 
 La opción **Agregar a Stremio** de la página Configure abre Stremio. Para Nuvio debes pegar el manifest dentro de su sección de Addons.
 
+### Acceso al manifest y protección de Vercel
+
+El manifest de producción debe estar disponible públicamente para que Stremio, Nuvio y otros clientes compatibles puedan instalar el addon sin iniciar sesión en Vercel.
+
+La protección **SSO de Vercel** está configurada para aplicarse únicamente a los despliegues **Preview**. El despliegue de **Production** permanece público; así se evita que la autenticación de Vercel bloquee la instalación del addon con un error HTTP 403.
+
+Si vuelve a aparecer un error 403 al instalarlo, comprueba que estás utilizando la URL de producción indicada arriba y revisa la configuración de **Deployment Protection** del proyecto en Vercel.
+
 ## Fuentes de reproducción
 
 AnimeLatam consulta automáticamente estas plataformas:
