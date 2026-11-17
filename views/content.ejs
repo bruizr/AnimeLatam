@@ -5,10 +5,10 @@
     <header class="hero">
       <div class="brand-lockup">
         <img class="brand-logo" src="<%= manifest?.logo || '' %>" alt="AnimeLatam">
-        <span class="eyebrow"><span class="status-dot"></span> STREMIO ADD-ON</span>
+        <span class="eyebrow"><span class="status-dot"></span> STREMIO · NUVIO ADD-ON</span>
       </div>
       <h1>Tu anime, <span>en español latino.</span></h1>
-      <p>AnimeLatam busca automáticamente enlaces de reproducción en español latino en sus fuentes compatibles. Instálalo en Stremio y deja que el addon encuentre las opciones disponibles.</p>
+      <p>AnimeLatam busca automáticamente enlaces de reproducción en español latino en sus fuentes compatibles. Instálalo en Stremio o Nuvio y deja que AnimeLatam encuentre automáticamente las opciones disponibles.</p>
       <div class="actions">
         <a class="button button-primary" id="install-stremio" href="#">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5 10 17l9-10"/></svg>
@@ -16,7 +16,7 @@
         </a>
         <button class="button button-secondary" id="copy-manifest" type="button">
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>
-          Copiar manifest
+          Copiar manifest · Stremio / Nuvio
         </button>
       </div>
       <p class="action-feedback" id="action-feedback" role="status" aria-live="polite"></p>
@@ -26,9 +26,23 @@
       </div>
     </header>
 
+    <section class="sources-section nuvio-guide">
+      <div class="section-heading">
+        <span class="section-kicker">01 / INSTALACIÓN EN NUVIO</span>
+        <h2>Usa AnimeLatam en Nuvio</h2>
+        <p>Nuvio admite complementos que utilizan el protocolo de Stremio. No necesitas una versión diferente de AnimeLatam.</p>
+      </div>
+      <ol class="install-steps">
+        <li><strong>Copia el manifest</strong><span>Usa el botón superior para copiar la dirección del addon.</span></li>
+        <li><strong>Abre Nuvio</strong><span>Entra en Ajustes → Addons → Añadir addon. En Android TV, abre la sección Addons desde el menú lateral.</span></li>
+        <li><strong>Pega e instala</strong><span>Pega la URL del manifest y confirma la instalación.</span></li>
+      </ol>
+      <p class="nuvio-note">El botón «Agregar a Stremio» abre Stremio. Para Nuvio, instala el addon pegando la URL del manifest dentro de la aplicación.</p>
+    </section>
+
     <section class="sources-section">
       <div class="section-heading">
-        <span class="section-kicker">01 / PROVEEDORES</span>
+        <span class="section-kicker">02 / PROVEEDORES</span>
         <h2>Fuentes de reproducción</h2>
         <p>El addon consulta estas plataformas automáticamente:</p>
       </div>
@@ -50,7 +64,7 @@
 
     <section class="credits-section">
       <div class="section-heading">
-        <span class="section-kicker">02 / PROYECTO</span>
+        <span class="section-kicker">03 / PROYECTO</span>
         <h2>Acerca de AnimeLatam</h2>
       </div>
       <p>AnimeLatam es una adaptación independiente basada en el proyecto original:</p>
@@ -91,7 +105,7 @@
         helper.remove();
         if (!copied) throw new Error('No se pudo copiar');
       }
-      feedback.textContent = '¡Manifest copiado! Ya puedes pegarlo en Stremio.';
+      feedback.textContent = '¡Manifest copiado! Pégalo en Stremio o en Nuvio → Ajustes → Addons → Añadir addon.';
       copyButton.classList.add('is-copied');
       copyButton.innerHTML = '<span aria-hidden="true">✓</span> Copiado';
       window.setTimeout(() => {
