@@ -316,10 +316,15 @@ app.get("/manifest.json", (_req, res) => {
 app.get("/:config/manifest.json", (req, res) => {
   ReadManifest().then((manif) => {
     const config = new URLSearchParams(decodeURIComponent(req.params.config))
-    let providers = config?.get("onAirCatalogs")?.split(',') || []
+    const catalogProviders = config.has("catalogProviders")
+      ? config.get("catalogProviders").split(',').filter(Boolean)
+      : ["animeav1", "henaojara", "latanime"]
+    const onAirProviders = config.get("onAirCatalogs")?.split(',').filter(Boolean) || []
     manif.catalogs = manif.catalogs.filter((cat) => {
-      if (!cat.id.includes("onair")) return true
-      else return providers.some((prov) => cat.id.startsWith(prov))
+      const provider = cat.id.split("|")[0]
+      if (["animeav1", "henaojara", "latanime"].includes(provider) && !catalogProviders.includes(provider)) return false
+      if (cat.id.includes("onair")) return onAirProviders.includes(provider)
+      return true
     })
     res.header('Cache-Control', "max-age=86400, stale-while-revalidate=86400, stale-if-error=259200")
     res.json(manif);
