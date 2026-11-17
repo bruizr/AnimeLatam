@@ -14,7 +14,7 @@ Este repositorio es un fork/adaptación del trabajo de:
 - **Nombre original:** AnimES Stremio addon
 - **Licencia original:** MIT
 
-Este repositorio conserva la base del addon original, incluyendo la integración con Stremio, la estructura de catálogos, metadatos y streams. AnimeLatam añade modificaciones propias, entre ellas el enfoque en fuentes con audio español latino y la selección de proveedores activos.
+Este repositorio conserva la base del addon original, incluyendo la integración con Stremio, la estructura de catálogos, metadatos y streams. AnimeLatam añade modificaciones propias, entre ellas el enfoque en fuentes con audio español latino y la configuración de catálogos.
 
 ## Proveedores y fuentes
 
@@ -34,7 +34,7 @@ Los proveedores que no están activos en la configuración actual no se anuncian
 
 - Búsqueda de anime desde Stremio.
 - Catálogos por género.
-- Catálogos de anime en emisión cuando el proveedor lo permite.
+- Catálogo opcional de anime en emisión con doblaje latino, con información de MyAnimeList (MAL) y TheTVDB.
 - Consulta de metadatos y listas de episodios.
 - Fuentes de reproducción filtradas por identificación de audio español latino.
 - Compatibilidad con identificadores externos admitidos por el addon y sus servicios de metadatos.
