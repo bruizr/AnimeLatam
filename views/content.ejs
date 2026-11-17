@@ -1,36 +1,106 @@
-<main class="config-panel">
-  <header class="hero">
-    <div class="eyebrow"><span class="status-dot"></span> STREMIO ADD-ON</div>
-    <h1>AnimeLatam</h1>
-    <p>Encuentra anime con fuentes de reproducción en español latino. AnimeLatam consulta automáticamente AnimeAV1, Henaojara y Latanime para localizar enlaces disponibles, sin que tengas que elegir proveedores.</p>
-  </header>
+<main class="page-shell">
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+  <section class="config-panel">
+    <header class="hero">
+      <div class="brand-lockup">
+        <img class="brand-logo" src="<%= manifest?.logo || '' %>" alt="AnimeLatam">
+        <span class="eyebrow"><span class="status-dot"></span> STREMIO ADD-ON</span>
+      </div>
+      <h1>Tu anime, <span>en español latino.</span></h1>
+      <p>AnimeLatam busca automáticamente enlaces de reproducción en español latino en sus fuentes compatibles. Instálalo en Stremio y deja que el addon encuentre las opciones disponibles.</p>
+      <div class="actions">
+        <a class="button button-primary" id="install-stremio" href="#">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5 10 17l9-10"/></svg>
+          Agregar a Stremio
+        </a>
+        <button class="button button-secondary" id="copy-manifest" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>
+          Copiar manifest
+        </button>
+      </div>
+      <p class="action-feedback" id="action-feedback" role="status" aria-live="polite"></p>
+      <div class="manifest-address">
+        <span>URL del manifest</span>
+        <code id="manifest-url"></code>
+      </div>
+    </header>
 
-  <section class="sources-section">
-    <h2>Fuentes de búsqueda</h2>
-    <p class="section-description">El addon realiza búsquedas en todas estas plataformas:</p>
-    <div class="source-logos">
-      <a class="source-logo" href="https://animeav1.com" target="_blank" rel="noopener noreferrer">
-        <img src="https://www.google.com/s2/favicons?domain=animeav1.com&sz=128" alt="Logo de AnimeAV1">
-        <strong>AnimeAV1</strong>
-      </a>
-      <a class="source-logo" href="https://ww1.henaojara.net" target="_blank" rel="noopener noreferrer">
-        <img src="https://www.google.com/s2/favicons?domain=henaojara.net&sz=128" alt="Logo de Henaojara">
-        <strong>Henaojara</strong>
-      </a>
-      <a class="source-logo" href="https://latanime.org" target="_blank" rel="noopener noreferrer">
-        <img src="https://www.google.com/s2/favicons?domain=latanime.org&sz=128" alt="Logo de Latanime">
-        <strong>Latanime</strong>
-      </a>
-    </div>
-  </section>
+    <section class="sources-section">
+      <div class="section-heading">
+        <span class="section-kicker">01 / PROVEEDORES</span>
+        <h2>Fuentes de reproducción</h2>
+        <p>El addon consulta estas plataformas automáticamente:</p>
+      </div>
+      <div class="source-logos">
+        <a class="source-logo" href="https://animeav1.com" target="_blank" rel="noopener noreferrer">
+          <span class="source-icon"><img src="https://www.google.com/s2/favicons?domain=animeav1.com&sz=128" alt=""></span>
+          <strong>AnimeAV1</strong><span class="external-mark">↗</span>
+        </a>
+        <a class="source-logo" href="https://ww1.henaojara.net" target="_blank" rel="noopener noreferrer">
+          <span class="source-icon"><img src="https://www.google.com/s2/favicons?domain=henaojara.net&sz=128" alt=""></span>
+          <strong>Henaojara</strong><span class="external-mark">↗</span>
+        </a>
+        <a class="source-logo" href="https://latanime.org" target="_blank" rel="noopener noreferrer">
+          <span class="source-icon"><img src="https://www.google.com/s2/favicons?domain=latanime.org&sz=128" alt=""></span>
+          <strong>Latanime</strong><span class="external-mark">↗</span>
+        </a>
+      </div>
+    </section>
 
-  <section class="credits-section">
-    <h2>Créditos</h2>
-    <p>AnimeLatam es una adaptación independiente basada en el proyecto original:</p>
-    <div class="credits-card">
-      <strong>AnimES Stremio addon</strong>
-      <a href="https://github.com/Pigamer37/animeflv-stremio-addon" target="_blank" rel="noopener noreferrer">github.com/Pigamer37/animeflv-stremio-addon ↗</a>
-    </div>
+    <section class="credits-section">
+      <div class="section-heading">
+        <span class="section-kicker">02 / PROYECTO</span>
+        <h2>Acerca de AnimeLatam</h2>
+      </div>
+      <p>AnimeLatam es una adaptación independiente basada en el proyecto original:</p>
+      <a class="credits-card" href="https://github.com/Pigamer37/animeflv-stremio-addon" target="_blank" rel="noopener noreferrer">
+        <span><strong>AnimES Stremio addon</strong><small>Proyecto original en GitHub</small></span>
+        <span class="credits-arrow">↗</span>
+      </a>
+    </section>
+    <footer class="config-footer"><span>ANIMELATAM</span><span>Addon comunitario para Stremio</span></footer>
   </section>
-  <footer class="config-footer">AnimeLatam · Addon comunitario para Stremio</footer>
 </main>
+
+<script>
+(() => {
+  const manifestUrl = window.location.origin + '/manifest.json';
+  const installUrl = 'stremio://' + window.location.host + '/manifest.json';
+  const installButton = document.getElementById('install-stremio');
+  const copyButton = document.getElementById('copy-manifest');
+  const urlLabel = document.getElementById('manifest-url');
+  const feedback = document.getElementById('action-feedback');
+
+  installButton.href = installUrl;
+  urlLabel.textContent = manifestUrl;
+
+  copyButton.addEventListener('click', async () => {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(manifestUrl);
+      } else {
+        const helper = document.createElement('textarea');
+        helper.value = manifestUrl;
+        helper.setAttribute('readonly', '');
+        helper.style.position = 'absolute';
+        helper.style.left = '-9999px';
+        document.body.appendChild(helper);
+        helper.select();
+        const copied = document.execCommand('copy');
+        helper.remove();
+        if (!copied) throw new Error('No se pudo copiar');
+      }
+      feedback.textContent = '¡Manifest copiado! Ya puedes pegarlo en Stremio.';
+      copyButton.classList.add('is-copied');
+      copyButton.innerHTML = '<span aria-hidden="true">✓</span> Copiado';
+      window.setTimeout(() => {
+        copyButton.classList.remove('is-copied');
+        copyButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg> Copiar manifest';
+      }, 2200);
+    } catch (error) {
+      feedback.textContent = 'No se pudo copiar automáticamente. Selecciona y copia la URL del manifest.';
+    }
+  });
+})();
+</script>
