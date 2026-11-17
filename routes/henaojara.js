@@ -78,7 +78,7 @@ exports.SearchHenaojara = async function (query, genreArr = undefined, url = und
   }).then((data) => {
     if (data?.data?.media === undefined) throw Error("Invalid response!")
     if (data.data.media.length < 1) throw Error("No search results!")
-    return data.data.media.slice(gottenItems).map((anime) => {
+    return data.data.media.filter((anime) => /(?:^|-)latino(?:-|$)/i.test(anime.slug)).slice(gottenItems).map((anime) => {
       return {
         title: anime.title, type: (anime.type === "Pelicula" || anime.type === "Película" || anime.type === "Especial" || anime.type === "movie") ? "movie" : "series",
         slug: anime.slug, poster: anime.cover, overview: anime.synopsis, genres: genreArr
@@ -132,7 +132,7 @@ exports.GetAnimeBySlug = async function (slug) {
     return {
       name: data.data.title, alternative_titles: data.data.alternative_titles, type: (data.data.type === "Pelicula" || data.data.type === "Película" || data.data.type === "Especial") ? "movie" : "series",
       videos, poster: data.data.cover, background: `${HENAOJARA_BASE}/cdn/img/portada/${data.data.slug}.webp?t=0.1`, genres: data.data.genres, description: data.data.synopsis.replaceAll(/\\n/g,'\n').replaceAll(/\\"/g,'"'), website: data.data.url, id: `henaojara:${slug}`,
-      language: "jpn", links,
+      language: /(?:^|-)latino(?:-|$)/i.test(slug) ? "spa" : "jpn", links,
       ...(data.data.next_airing_episode !== undefined) && { behaviorHints: { hasScheduledVideos: true } },
       ...(videos.length == 1) && { behaviorHints: { defaultVideoId: `henaojara:${slug}:1` } }
     }
@@ -411,7 +411,7 @@ async function GetOnAir() {
   //airing lists span several pages (AnimeAV1: 66 shows over 4); only the first one used to be read
   return CollectPages((page) => SearchAnimesBySpecificURL(`${HENAOJARA_BASE}/animes?estado=en-emision&pag=${page}`).then((data) => {
     if (!data || data.media === undefined) throw Error("Invalid response!")
-    return data.media.map((anime) => {
+    return data.media.filter((anime) => /(?:^|-)latino(?:-|$)/i.test(anime.slug)).map((anime) => {
       return {
         title: anime.title,
         type: anime.type,
