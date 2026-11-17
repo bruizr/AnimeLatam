@@ -38,7 +38,7 @@ function titleMatches(a, b) {
   const left = normalizeTitle(a);
   const right = normalizeTitle(b);
   if (!left || !right) return false;
-  if (left === right || left.includes(right) || right.includes(left)) return true;
+  if (left === right) return true;
   const tokensA = new Set(left.split(" "));
   const tokensB = new Set(right.split(" "));
   const common = [...tokensA].filter((token) => tokensB.has(token)).length;
@@ -60,7 +60,7 @@ async function getMALSeason() {
   url.searchParams.set("fields", "alternative_titles,start_date,end_date,synopsis,mean,num_episodes,status,genres,media_type");
   const response = await fetchJSON(url, { headers: { "X-MAL-CLIENT-ID": clientId, "Accept": "application/json" } });
   return (response.data || []).map((entry) => entry.node || entry)
-    .filter((node) => node && node.id && (!node.status || node.status === "currently_airing"));
+    .filter((node) => node && node.id && node.media_type === "tv" && (!node.status || node.status === "currently_airing"));
 }
 
 async function getTVDBToken() {
@@ -90,7 +90,7 @@ async function searchTVDB(node) {
   const response = await fetchJSON(url, { headers: { "Authorization": "Bearer " + token, "Accept": "application/json" } });
   const results = response.data || [];
   const names = getMalNames(node);
-  return results.find((result) => names.some((name) => titleMatches(name, result.name))) || results[0] || null;
+  return results.find((result) => names.some((name) => titleMatches(name, result.name))) || null;
 }
 
 async function mapWithLimit(items, limit, mapper) {
