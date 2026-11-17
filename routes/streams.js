@@ -42,9 +42,6 @@ function HandleLongStreamRequest(req, res, next) {
 function HandleStreamRequest(req, res, next) {
   console.log(`\x1b[96mEntered HandleStreamRequest with\x1b[39m ${req.originalUrl}`)
   const onlyInternal = (res.locals.config?.get("externalStreams") != 'true')
-  const configuredProviders = res.locals.config?.has("streamProviders")
-    ? res.locals.config.get("streamProviders").split(',').filter(Boolean)
-    : ["animeav1", "henaojara", "latanime"]
   let streams = []
   const idDetails = req.params.videoId.split(':')
   const videoID = idDetails[0] //We only want the first part of the videoID, which is the IMDB ID, the rest would be the season and episode
@@ -55,9 +52,9 @@ function HandleStreamRequest(req, res, next) {
     console.log(`\x1b[33mGot a ${req.params.type} with ${videoID} ID:\x1b[39m ${ID}`)
     console.log('Extra parameters:', res.locals.extraParams)
     const sourcePromises = {}
-    if (configuredProviders.includes("animeav1") && videoID === "animeav1") sourcePromises.AnimeAV1 = animeAV1API.GetItemStreams(ID, onlyInternal, episode)
-    if (configuredProviders.includes("henaojara") && videoID === "henaojara") sourcePromises.Henaojara = henaojaraAPI.GetItemStreams(ID, onlyInternal, episode)
-    if (configuredProviders.includes("latanime") && videoID === "latanime") sourcePromises.Latanime = latanimeAPI.GetItemStreams(ID, onlyInternal, episode)
+    if (videoID === "animeav1") sourcePromises.AnimeAV1 = animeAV1API.GetItemStreams(ID, onlyInternal, episode)
+    if (videoID === "henaojara") sourcePromises.Henaojara = henaojaraAPI.GetItemStreams(ID, onlyInternal, episode)
+    if (videoID === "latanime") sourcePromises.Latanime = latanimeAPI.GetItemStreams(ID, onlyInternal, episode)
     CombineStreams(sourcePromises).then((combinedStreams)=>{
       if (combinedStreams.length > 0) {
         console.log(`\x1b[36mGot ${combinedStreams.length} streams\x1b[39m`)
@@ -161,28 +158,28 @@ function HandleStreamRequest(req, res, next) {
       //   console.log('\x1b[36mGot AnimeFLV entry:\x1b[39m', result.title)
       //   return animeFLVAPI.GetItemStreams(result.slug, onlyInternal, episode)
       // })
-      const animeAV1p = configuredProviders.includes("animeav1") ? firstMatch((searchTerm) => animeAV1API.SearchAnimeAV1(searchTerm, req.params.type).then(notSpecial).then((animeFLVitem) => {
+      const animeAV1p = firstMatch((searchTerm) => animeAV1API.SearchAnimeAV1(searchTerm, req.params.type).then(notSpecial).then((animeFLVitem) => {
         const result = fuzzysort.go(searchTerm, animeFLVitem, {key: 'title', limit: 1, threshold: .5})[0]?.obj;
         if (!result) throw Error('No search results!')
         console.log('\x1b[36mGot AnimeAV1 entry:\x1b[39m', result.title)
         return animeAV1API.GetItemStreams(result.slug, onlyInternal, episode)
-      })) : Promise.resolve([])
+      }))
       //Henaojara lists every season, movie and dub as its own entry: keep only the ones that can be the requested one
       //(same type, no "Season/Part N" of another season), fuzzy match among them, and don't fall back to the first result
       const sameSeason = (title) => { const n = title.match(/\b(?:season|temporada|part|parte)\s*(\d+)/i)?.[1]; return !n || parseInt(n) === (parseInt(season) || 1) }
-      const henaojarap = configuredProviders.includes("henaojara") ? firstMatch((searchTerm) => henaojaraAPI.SearchHenaojara(searchTerm).then(notSpecial).then((animeFLVitem) => {
+      const henaojarap = firstMatch((searchTerm) => henaojaraAPI.SearchHenaojara(searchTerm).then(notSpecial).then((animeFLVitem) => {
         const candidates = animeFLVitem.filter((i) => (!i.type || i.type === req.params.type) && sameSeason(i.title))
         const result = fuzzysort.go(searchTerm, candidates, {key: 'title', limit: 1, threshold: .5})[0]?.obj;
         if (!result) throw Error('No search results!')
         console.log('\x1b[36mGot Henaojara entry:\x1b[39m', result.title)
         return henaojaraAPI.GetItemStreams(result.slug, onlyInternal, episode)
-      })) : Promise.resolve([])
-      const latanimep = configuredProviders.includes("latanime") ? firstMatch((searchTerm) => latanimeAPI.SearchLatanime(searchTerm, req.params.type).then(notSpecial).then((items) => {
+      }))
+      const latanimep = firstMatch((searchTerm) => latanimeAPI.SearchLatanime(searchTerm, req.params.type).then(notSpecial).then((items) => {
         const result = fuzzysort.go(searchTerm, items, {key: 'title', limit: 1, threshold: .5})[0]?.obj
         if (!result) throw Error('No search results!')
         console.log('\x1b[36mGot Latanime entry:\x1b[39m', result.title)
         return latanimeAPI.GetItemStreams(result.slug, onlyInternal, episode)
-      })) : Promise.resolve([])
+      }))
       return Promise.allSettled([animeAV1p, henaojarap, latanimep]).then((results) => results.flatMap((result) => result.status === "fulfilled" ? result.value : []))
     })).then((foundStreams) => {
       if (!res.headersSent) {
