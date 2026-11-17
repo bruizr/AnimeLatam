@@ -233,7 +233,23 @@ function HandleCalendarRequest(req, res) {
     }
   })
 }
+// Dedicated route for the optional MAL/TVDB Latino airing catalog.
+// Respond directly so missing API credentials never turn a Stremio catalog request into an HTTP 500.
+async function HandleLatinoAiringCatalog(_req, res) {
+  try {
+    const metas = await latinoAiringAPI.GetLatinoAiringAnime();
+    res.header('Cache-Control', metas.length ? CLIENT_CACHE.catalog : CLIENT_CACHE.failure);
+    return res.status(200).json({ metas, message: "Got Latino airing metadata!" });
+  } catch (err) {
+    console.error("Failed building Latino airing catalog:", err);
+    return res.status(200).json({ metas: [], message: "Latino airing catalog requires valid MAL and TVDB API credentials" });
+  }
+}
+
 //Configured requests
+//Calendar requests and the dedicated Latino airing catalog are registered before generic catalog routes.
+catalog.get("/catalog/:type/latino-onair.json", HandleLatinoAiringCatalog)
+catalog.get("/:config/catalog/:type/latino-onair.json", ParseConfig, HandleLatinoAiringCatalog)
 //Calendar requests, configured or not (before the generic routes, which would take them as a normal catalog)
 catalog.get("/catalog/series/calendar-videos/:calendarVideosIds(calendarVideosIds=(?:\\S{0,},?){0,}).json", HandleCalendarRequest)
 catalog.get("/:config/catalog/series/calendar-videos/:calendarVideosIds(calendarVideosIds=(?:\\S{0,},?){0,}).json", ParseConfig, HandleCalendarRequest)
