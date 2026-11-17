@@ -131,7 +131,7 @@ function ReadManifest() {
         //   ]
         // },
         // {
-        //   id: "animeflv|genres", type: "Anime", name: "AnimeFLV",
+        //   id: "animeflv|genres", type: "anime", name: "AnimeFLV",
         //   extra: [
         //     {
         //       name: "genre",
@@ -147,7 +147,7 @@ function ReadManifest() {
         //   ]
         // },
         {
-          id: "animeav1|genres", type: "Anime", name: "AnimeAV1",
+          id: "animeav1|genres", type: "anime", name: "AnimeAV1",
           extra: [
             {
               name: "genre",
@@ -163,7 +163,7 @@ function ReadManifest() {
           ]
         },
         {
-          id: "henaojara|genres", type: "Anime", name: "Henaojara",
+          id: "henaojara|genres", type: "anime", name: "Henaojara",
           extra: [
             {
               name: "genre",
@@ -180,7 +180,7 @@ function ReadManifest() {
           ]
         },
         {
-          id: "latanime|genres", type: "Anime", name: "Latanime",
+          id: "latanime|genres", type: "anime", name: "Latanime",
           extra: [
             {
               name: "genre",
@@ -195,7 +195,7 @@ function ReadManifest() {
           ]
         },
         // {
-        //   id: "animejara|genres", type: "Anime", name: "AnimeJara",
+        //   id: "animejara|genres", type: "anime", name: "AnimeJara",
         //   extra: [
         //     {
         //       name: "genre",
@@ -212,7 +212,7 @@ function ReadManifest() {
         //   ]
         // },
         // {
-        //   id: "jkanime|genres", type: "Anime", name: "JKAnime",
+        //   id: "jkanime|genres", type: "anime", name: "JKAnime",
         //   extra: [
         //     {
         //       name: "genre",
