@@ -39,6 +39,18 @@ Los proveedores que no están activos en la configuración actual no se anuncian
 - Fuentes de reproducción filtradas por identificación de audio español latino.
 - Compatibilidad con identificadores externos admitidos por el addon y sus servicios de metadatos.
 
+## Catálogo de anime en emisión
+
+El catálogo opcional **En emisión · Español latino** cruza la temporada actual de MyAnimeList con los títulos en emisión que detectan las fuentes activas del addon. Los resultados se enriquecen con información de TheTVDB cuando existe una coincidencia de título suficientemente fiable. La disponibilidad de doblaje se basa en las señales que proporcionan las fuentes de reproducción; MAL y TVDB se utilizan como bases de metadatos, no como prueba de doblaje.
+
+Para habilitar este catálogo en el despliegue, configura estas variables de entorno en Vercel:
+
+- `MAL_CLIENT_ID`: Client ID para la API de MyAnimeList.
+- `TVDB_API_KEY`: API key de TheTVDB.
+- `TVDB_PIN`: PIN de suscriptor, solo si el tipo de clave de TheTVDB lo requiere.
+
+No incluyas estas credenciales en el repositorio. El acceso a TheTVDB está sujeto a sus condiciones y modelo de licencia; revisa sus requisitos para el uso de API en servicios de terceros antes de habilitarlo.
+
 ## Instalación en Stremio
 
 Puedes instalar AnimeLatam desde el manifiesto:
