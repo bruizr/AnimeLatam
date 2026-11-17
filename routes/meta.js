@@ -6,12 +6,9 @@ require('dotenv').config()//process.env.var
 const Metadata = require('./metadata_copy.js')
 const relationsAPI = require('./relations.js')
 const CLIENT_CACHE = require('../lib/clientCache.js')
-const animeFLVAPI = require('./animeFLV.js')
 const animeAV1API = require('./animeav1.js')
 const henaojaraAPI = require('./henaojara.js')
-const tioanimeAPI = require('./tioanime.js')
 // const animejaraAPI = require('./animejara.js')
-const jkanimeAPI = require('./jkanime.js')
 const latanimeAPI = require('./latanime.js')
 const fuzzysort = require('fuzzysort')
 
@@ -93,55 +90,6 @@ function HandleMetaRequest(req, res, next) {
       if (!res.headersSent) {
         res.header('Cache-Control', "max-age=86400, stale-while-revalidate=86400, stale-if-error=259200")
         res.json({ meta: {}, message: "Failed getting Latanime info" });
-        next()
-      }
-    })
-  } else if (videoID?.startsWith("tioanime")){
-    const ID = idDetails[1]
-    console.log(`\x1b[33mGot a ${req.params.type} with ${videoID} ID:\x1b[39m ${ID}`)
-    tioanimeAPI.GetAnimeBySlug(ID).then((animeMeta) => {
-      console.log('\x1b[36mGot TioAnime metadata for:\x1b[39m', animeMeta.name)
-      res.header('Cache-Control', CLIENT_CACHE.meta)
-      res.json({ meta: animeMeta, message: "Got TioAnime metadata!" })
-      next()
-    }).catch((err) => {
-      console.error('\x1b[31mFailed on TioAnime slug search because:\x1b[39m ' + err)
-      if (!res.headersSent) {
-        res.header('Cache-Control', CLIENT_CACHE.failure)
-        res.json({ meta: {}, message: "Failed getting TioAnime info" });
-        next()
-      }
-    })
-  // } else if (videoID?.startsWith("animejara")){
-  //   const ID = idDetails[1] 
-  //   let season = idDetails[2] //undefined if we don't get an season number in the query, which is fine
-  //   console.log(`\x1b[33mGot a ${req.params.type} with ${videoID} ID:\x1b[39m ${ID}`)
-  //   animejaraAPI.GetAnimeBySlug(ID, req.params.type).then((animeMeta) => {
-  //     console.log('\x1b[36mGot AnimeJara metadata for:\x1b[39m', animeMeta.name)
-  //     res.header('Cache-Control', CLIENT_CACHE.meta)
-  //     res.json({ meta: animeMeta, message: "Got AnimeJara metadata!" })
-  //     next()
-  //   }).catch((err) => {
-  //     console.error('\x1b[31mFailed on AnimeJara slug search because:\x1b[39m ' + err)
-  //     if (!res.headersSent) {
-  //       res.header('Cache-Control', CLIENT_CACHE.failure)
-  //       res.json({ meta: {}, message: "Failed getting AnimeJara info" });
-  //       next()
-  //     }
-  //   })
-  } else if (videoID?.startsWith("jkanime")){
-    const ID = idDetails[1]
-    console.log(`\x1b[33mGot a ${req.params.type} with ${videoID} ID:\x1b[39m ${ID}`)
-    jkanimeAPI.GetAnimeBySlug(ID).then((animeMeta) => {
-      console.log('\x1b[36mGot JKAnime metadata for:\x1b[39m', animeMeta.name)
-      res.header('Cache-Control', CLIENT_CACHE.meta)
-      res.json({ meta: animeMeta, message: "Got JKAnime metadata!" })
-      next()
-    }).catch((err) => {
-      console.error('\x1b[31mFailed on JKAnime slug search because:\x1b[39m ' + err)
-      if (!res.headersSent) {
-        res.header('Cache-Control', CLIENT_CACHE.failure)
-        res.json({ meta: {}, message: "Failed getting JKAnime info" });
         next()
       }
     })
@@ -243,7 +191,6 @@ module.exports = metas;
 const NATIVE_META_SOURCES = [
   { name: "AnimeAV1", search: (term) => animeAV1API.SearchAnimeAV1(term), meta: (slug) => animeAV1API.GetAnimeBySlug(slug) },
   // { name: "JKAnime", search: (term) => jkanimeAPI.SearchJKAnime(term), meta: (slug) => jkanimeAPI.GetAnimeBySlug(slug) }, //403 on the server (#61)
-  { name: "TioAnime", search: (term) => tioanimeAPI.SearchTioAnime(term), meta: (slug) => tioanimeAPI.GetAnimeBySlug(slug) },
 ]
 async function FindNativeMeta(searchTerm) {
   for (const src of NATIVE_META_SOURCES) {
