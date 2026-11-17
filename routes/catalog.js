@@ -38,7 +38,9 @@ function HandleCatalogRequest(req, res, next) {
   console.log(`\x1b[96mEntered HandleCatalogRequest with\x1b[39m ${req.originalUrl}`)
   console.log('Extra parameters:', res.locals.extraParams)
   let catalogPromise
-  if (req.params.videoId.startsWith("animeav1")) {
+  if (req.params.videoId === "latino-onair") {
+    catalogPromise = latinoAiringAPI.GetLatinoAiringAnime()
+  } else if (req.params.videoId.startsWith("animeav1")) {
     //animeAV1 catalog request
     if (res.locals.extraParams && !req.params.videoId.includes("onair")) {
       let genreArr = res.locals.extraParams.genre
