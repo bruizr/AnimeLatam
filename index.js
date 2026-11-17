@@ -265,7 +265,7 @@ function ReadManifest() {
       ],
       "resources": [
         "stream",
-        { name: 'meta', types: ['movie', 'series', 'anime', 'other'], idPrefixes: [ /*"animeflv:",*/"animeav1:","henaojara:","tioanime:",/*"animejara:",*/ /*"jkanime:",*/"latanime:","anilist:","mal:","anidb:"] },
+        { name: 'meta', types: ['movie', 'series', 'anime', 'other'], idPrefixes: [ /*"animeflv:",*/"animeav1:","henaojara:",/*"animejara:",*/ /*"jkanime:",*/"latanime:","anilist:","mal:","anidb:"] },
         "catalog"
       ],
       "types": [
