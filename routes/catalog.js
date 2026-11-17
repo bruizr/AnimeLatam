@@ -6,11 +6,8 @@ require('dotenv').config()//process.env.var
 const Metadata = require('./metadata_copy.js')
 const relationsAPI = require('./relations.js')
 const CLIENT_CACHE = require('../lib/clientCache.js')
-const animeFLVAPI = require('./animeFLV.js')
 const animeAV1API = require('./animeav1.js')
 const henaojaraAPI = require('./henaojara.js')
-const animejaraAPI = require('./animejara.js')
-const jkanimeAPI = require('./jkanime.js')
 const latanimeAPI = require('./latanime.js')
 
 /**
@@ -152,80 +149,7 @@ function HandleCatalogRequest(req, res, next) {
         })
       })
     }
-  } else if (req.params.videoId.startsWith("jkanime")) {
-    //jkanime catalog request
-    if (res.locals.extraParams && !req.params.videoId.includes("onair")) {
-      let genreArr = res.locals.extraParams.genre
-      //calculate the page to start from, JKAnime uses 30 results per page
-      //if skip is defined, we can calculate the page and the number of items we already delivered
-      let page = (res.locals.extraParams.skip) ? Math.floor(res.locals.extraParams.skip / 30) + 1 : undefined,
-        gottenItems = (res.locals.extraParams.skip) ? res.locals.extraParams.skip % 30 : undefined
-      console.log("Skipping to page:", page, "with", gottenItems, "items already delivered")
-      catalogPromise = jkanimeAPI.SearchJKAnime(res.locals.extraParams.search, undefined, genreArr, undefined, page, gottenItems).then((result) => {
-        console.log('\x1b[36mGot JKAnime metadata for:\x1b[39m', result.length, "search results")
-        return result.map((anime) => {
-          return {
-            id: `jkanime:${anime.slug}`,
-            type: anime.type,
-            name: anime.title,
-            poster: anime.poster,
-            description: anime.overview,
-            genres: (anime.genres) ? anime.genres.map((el) => el.slice(0, 1).toUpperCase() + el.slice(1)) : undefined
-          }
-        })
-      })
-    } else {
-      catalogPromise = jkanimeAPI.GetAiringAnime().then((result) => {
-        console.log('\x1b[36mGot JKAnime metadata for:\x1b[39m', result.length, "search results")
-        return result.map((anime) => {
-          return {
-            id: `jkanime:${anime.slug}`,
-            type: anime.type,
-            name: anime.title,
-            poster: anime.poster,
-            description: anime.overview,
-            genres: (anime.genres) ? anime.genres.map((el) => el.slice(0, 1).toUpperCase() + el.slice(1)) : undefined
-          }
-        })
-      })
-    }
-  }// else {
-  //   if (res.locals.extraParams && !req.params.videoId.includes("onair")) {
-  //     let genreArr = res.locals.extraParams.genre
-  //     //calculate the page to start from, AnimeFLV uses 24 results per page
-  //     //if skip is defined, we can calculate the page and the number of items we already delivered
-  //     let page = (res.locals.extraParams.skip) ? Math.floor(res.locals.extraParams.skip / 24) + 1 : undefined,
-  //       gottenItems = (res.locals.extraParams.skip) ? res.locals.extraParams.skip % 24 : undefined
-  //     console.log("Skipping to page:", page, "with", gottenItems, "items already delivered")
-  //     catalogPromise = animeFLVAPI.SearchAnimeFLV(res.locals.extraParams.search, genreArr, undefined, page, gottenItems).then((result) => {
-  //       console.log('\x1b[36mGot AnimeFLV metadata for:\x1b[39m', result.length, "search results")
-  //       return result.map((anime) => {
-  //         return {
-  //           id: `animeflv:${anime.slug}`,
-  //           type: anime.type,
-  //           name: anime.title,
-  //           poster: anime.poster,
-  //           description: anime.overview,
-  //           genres: (anime.genres) ? anime.genres.map((el) => el.slice(0, 1).toUpperCase() + el.slice(1)) : undefined
-  //         }
-  //       })
-  //     })
-  //   } else {
-  //     catalogPromise = animeFLVAPI.GetAiringAnime().then((result) => {
-  //       console.log('\x1b[36mGot AnimeFLV metadata for:\x1b[39m', result.length, "search results")
-  //       return result.map((anime) => {
-  //         return {
-  //           id: `animeflv:${anime.slug}`,
-  //           type: anime.type,
-  //           name: anime.title,
-  //           poster: anime.poster,
-  //           description: anime.overview,
-  //           genres: (anime.genres) ? anime.genres.map((el) => el.slice(0, 1).toUpperCase() + el.slice(1)) : undefined
-  //         }
-  //       })
-  //     })
-  //   }
-  // }
+  }
   if (!catalogPromise) catalogPromise = Promise.reject(Error(`Unknown catalog ${req.params.videoId}`)) //e.g. disabled sources' catalogs requested by old installs
   catalogPromise.then((metas) => {
     res.header('Cache-Control', CLIENT_CACHE.catalog)
@@ -254,60 +178,42 @@ function ParseConfig(req, res, next) {
 }
 //Calendar requests
 function HandleCalendarRequest(req, res) {
-  let metasDetailed = [], uniqueIDs = [...new Set(req.params.calendarVideosIds.slice(18).split(',')//filter idPrefixes not covered by other meta providers
-    .filter((id) => id.startsWith("animeflv:") /*|| id.startsWith("animeav1:") || id.startsWith("henaojara:")*/ || id.startsWith("animejara:") /*|| id.startsWith("jkanime:")*/ || id.startsWith("anilist:") || id.startsWith("kitsu:") || id.startsWith("mal:") || id.startsWith("anidb:")))]
+  const uniqueIDs = [...new Set(
+    req.params.calendarVideosIds.slice(18).split(',')
+      .filter((id) =>
+        id.startsWith("animeav1:") ||
+        id.startsWith("henaojara:") ||
+        id.startsWith("latanime:") ||
+        id.startsWith("anilist:") ||
+        id.startsWith("kitsu:") ||
+        id.startsWith("mal:") ||
+        id.startsWith("anidb:")
+      )
+  )]
 
   console.log("Unique IDs:", uniqueIDs)
 
   Promise.allSettled(uniqueIDs.map((item) => {
-    const idDetails = item.split(':')
-    const videoID = idDetails[0]
-    /*if (videoID.startsWith("animeflv")) {
-      const ID = idDetails[1]
-      console.log(`\x1b[33mGot ${videoID} ID:\x1b[39m ${ID}`)
-      return animeFLVAPI.GetAnimeBySlug(ID)
-    } else*/ if (videoID.startsWith("animeav1")) {
-      const ID = idDetails[1]
-      console.log(`\x1b[33mGot ${videoID} ID:\x1b[39m ${ID}`)
-      return animeAV1API.GetAnimeBySlug(ID)
-    } else if (videoID.startsWith("henaojara")) {
-      const ID = idDetails[1]
-      console.log(`\x1b[33mGot ${videoID} ID:\x1b[39m ${ID}`)
-      return henaojaraAPI.GetAnimeBySlug(ID)
- else if (videoID.startsWith("jkanime")) {
-      const ID = idDetails[1]
-      console.log(`\x1b[33mGot ${videoID} ID:\x1b[39m ${ID}`)
-      return jkanimeAPI.GetAnimeBySlug(ID) //only series have upcoming eps
-    } else {
-      let animeIMDBIDPromise
-      const ID = idDetails[1] //We want the second part of the videoID, which is the kitsu ID
-      const season = undefined //calendar IDs (kitsu:, mal:...) carry no season; reading an undeclared one threw a ReferenceError
-      console.log(`\x1b[33mGot ${videoID} ID:\x1b[39m ${ID}`)
-      animeIMDBIDPromise = relationsAPI.GetIMDBIDFromANIMEID(videoID, ID)
-      return animeIMDBIDPromise.then((imdbID) => { //returned, so a failure is just a missing item instead of an unhandled rejection
-        if (!imdbID || imdbID === "null") throw Error("No IMDB ID")
-        console.log(`\x1b[33mGetting TMDB metadata for IMDB ID:\x1b[39m`, imdbID)
-        return Metadata.GetTMDBMeta(imdbID).then((TMDBmeta) => {
-          console.log('\x1b[36mGot TMDB metadata:\x1b[39m', TMDBmeta.shortPrint())
-          return TMDBmeta
-        }).catch((reason) => {
-          console.error("\x1b[31mDidn't get TMDB metadata because:\x1b[39m " + reason + ", \x1b[33mtrying Cinemeta...\x1b[39m")
-          return Metadata.GetCinemetaMeta(imdbID, req.params.type).then((Cinemeta) => {
-            console.log('\x1b[36mGot Cinemeta metadata:\x1b[39m', Cinemeta.shortPrint())
-            return Cinemeta
-          })
-        })
-      }).then((metadata) => {
-        const searchTerm = ((season !== undefined) && (season) && (parseInt(season) !== 1)) ? `${metadata.title} ${season}` : metadata.title
-        return animeFLVAPI.SearchAnimeFLV(searchTerm).then((animeFLVitem) => {
-          console.log('\x1b[36mGot AnimeFLV entry:\x1b[39m', animeFLVitem[0].title)
-          return animeFLVAPI.GetAnimeBySlug(animeFLVitem[0].slug)
-        })
+    const [videoID, ID] = item.split(':')
+    console.log(`\x1b[33mGot ${videoID} ID:\x1b[39m ${ID}`)
+
+    if (videoID === "animeav1") return animeAV1API.GetAnimeBySlug(ID)
+    if (videoID === "henaojara") return henaojaraAPI.GetAnimeBySlug(ID)
+    if (videoID === "latanime") return latanimeAPI.GetAnimeBySlug(ID)
+
+    return relationsAPI.GetIMDBIDFromANIMEID(videoID, ID).then((imdbID) => {
+      if (!imdbID || imdbID === "null") throw Error("No IMDB ID")
+      console.log(`\x1b[33mGetting TMDB metadata for IMDB ID:\x1b[39m`, imdbID)
+      return Metadata.GetTMDBMeta(imdbID).then((TMDBmeta) => {
+        console.log('\x1b[36mGot TMDB metadata for calendar item:\x1b[39m', TMDBmeta.shortPrint())
+        return TMDBmeta
+      }).catch((reason) => {
+        console.error("\x1b[31mDidn't get TMDB metadata because:\x1b[39m " + reason + ", \x1b[33mtrying Cinemeta...\x1b[39m")
+        return Metadata.GetCinemetaMeta(imdbID, req.params.type)
       })
-    }
+    })
   })).then((promises) => {
-    console.log("Promises allSettled")
-    metasDetailed = promises.filter((prom) => (prom.value)).map((el) => {
+    const metasDetailed = promises.filter((prom) => prom.status === "fulfilled" && prom.value).map((el) => {
       //only upcoming videos; sites without real dates get estimated ones ("today" for the latest episode), so use the flag
       el.value.videos = el.value.videos.filter((video) => video.available === false)
       return el.value
@@ -316,6 +222,12 @@ function HandleCalendarRequest(req, res) {
     if (!res.headersSent) {
       res.header('Cache-Control', CLIENT_CACHE.meta)
       res.json({ metasDetailed })
+    }
+  }).catch((err) => {
+    console.error("Failed getting calendar metadata:", err)
+    if (!res.headersSent) {
+      res.header('Cache-Control', CLIENT_CACHE.failure)
+      res.json({ metasDetailed: [] })
     }
   })
 }
