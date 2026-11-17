@@ -376,13 +376,10 @@ function startLocalServer() {
     const url = `http://127.0.0.1:${process.env.PORT || 3000}/manifest.json`
     console.log('Open the following for a developement web Stremio session:', `https://staging.strem.io#?addonOpen=${encodeURIComponent(url)}`)
   }
-  // const animeFLVAPI = require('./routes/animeFLV.js')
   const animeAV1API = require('./routes/animeav1.js')
   const henaojaraAPI = require('./routes/henaojara.js')
-  // const animejaraAPI = require('./routes/animejara.js') // Cloudflare protected
-  // const jkanimeAPI = require('./routes/jkanime.js') //JKAnime answers 403 to the server's IP (#61)
   const latanimeAPI = require('./routes/latanime.js')
-  let imports = [/*animeFLVAPI, animejaraAPI,*/ animeAV1API, henaojaraAPI/*, jkanimeAPI*/, latanimeAPI]
+  const imports = [animeAV1API, henaojaraAPI, latanimeAPI]
   const REFRESH = 6 * 3600000 //newly airing shows appear within hours
   //When the code is newer than a saved list (a deploy), that list was built by the old code: refresh it right away
   const codeTime = Promise.all(["routes", "lib"].map((dir) => fsPromises.readdir(dir).then((files) =>
