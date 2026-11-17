@@ -2,34 +2,25 @@
   <header class="hero">
     <div class="eyebrow"><span class="status-dot"></span> STREMIO ADD-ON</div>
     <h2>Personaliza tu AnimeLatam</h2>
-    <p>Elige dónde buscar tus episodios y qué catálogos quieres ver en Stremio.</p>
+    <p>Configura tus catálogos y añade, si lo deseas, una selección de anime en emisión con doblaje al español latino.</p>
   </header>
-
   <section class="settings-section">
-    <div class="section-heading"><span class="section-icon">⌕</span><div><h3>Fuentes del scraper</h3><p>Selecciona los proveedores que AnimeLatam consultará al buscar streams.</p></div></div>
-    <div class="provider-grid">
-      <label class="provider-card"><input type="checkbox" class="stream-provider" value="animeav1" <%= (!config || !config.has("streamProviders") || config.get("streamProviders").split(",").includes("animeav1")) ? "checked" : "" %>><span class="provider-mark">A1</span><span class="provider-copy"><strong>AnimeAV1</strong><small>Streams en español latino</small></span><span class="checkmark">✓</span></label>
-      <label class="provider-card"><input type="checkbox" class="stream-provider" value="henaojara" <%= (!config || !config.has("streamProviders") || config.get("streamProviders").split(",").includes("henaojara")) ? "checked" : "" %>><span class="provider-mark">H</span><span class="provider-copy"><strong>Henaojara</strong><small>Streams en español latino</small></span><span class="checkmark">✓</span></label>
-      <label class="provider-card"><input type="checkbox" class="stream-provider" value="latanime" <%= (!config || !config.has("streamProviders") || config.get("streamProviders").split(",").includes("latanime")) ? "checked" : "" %>><span class="provider-mark">L</span><span class="provider-copy"><strong>Latanime</strong><small>Streams en español latino</small></span><span class="checkmark">✓</span></label>
-    </div>
-    <div class="section-actions"><button type="button" class="text-button" data-select="stream-provider">Seleccionar todos</button><span>·</span><button type="button" class="text-button" data-clear="stream-provider">Ninguno</button></div>
-  </section>
-
-  <section class="settings-section">
-    <div class="section-heading"><span class="section-icon">▦</span><div><h3>Catálogos de Stremio</h3><p>Controla qué proveedores aparecen en la búsqueda y exploración de catálogos.</p></div></div>
+    <div class="section-heading"><span class="section-icon">▦</span><div><h3>Catálogos de Stremio</h3><p>Elige qué catálogos de búsqueda y géneros quieres mostrar. Las fuentes de reproducción se consultan siempre de forma automática.</p></div></div>
     <div class="provider-grid">
       <label class="provider-card"><input type="checkbox" class="catalog-provider" value="animeav1" <%= (!config || !config.has("catalogProviders") || config.get("catalogProviders").split(",").includes("animeav1")) ? "checked" : "" %>><span class="provider-mark">A1</span><span class="provider-copy"><strong>AnimeAV1</strong><small>Búsqueda y géneros</small></span><span class="checkmark">✓</span></label>
       <label class="provider-card"><input type="checkbox" class="catalog-provider" value="henaojara" <%= (!config || !config.has("catalogProviders") || config.get("catalogProviders").split(",").includes("henaojara")) ? "checked" : "" %>><span class="provider-mark">H</span><span class="provider-copy"><strong>Henaojara</strong><small>Búsqueda y géneros</small></span><span class="checkmark">✓</span></label>
       <label class="provider-card"><input type="checkbox" class="catalog-provider" value="latanime" <%= (!config || !config.has("catalogProviders") || config.get("catalogProviders").split(",").includes("latanime")) ? "checked" : "" %>><span class="provider-mark">L</span><span class="provider-copy"><strong>Latanime</strong><small>Búsqueda y géneros</small></span><span class="checkmark">✓</span></label>
     </div>
     <div class="section-actions"><button type="button" class="text-button" data-select="catalog-provider">Seleccionar todos</button><span>·</span><button type="button" class="text-button" data-clear="catalog-provider">Ninguno</button></div>
-    <div class="onair-option"><label><input type="checkbox" id="onAirCatalogs" <%= (config?.get("onAirCatalogs")) ? "checked" : "" %>><span><strong>Mostrar catálogos “En emisión”</strong><small>Añade una sección con los animes que se están emitiendo.</small></span></label></div>
+    <div class="onair-option"><label><input type="checkbox" id="latinoOnAir" <%= config?.get("latinoOnAir") === "true" ? "checked" : "" %>><span><strong>Catálogo: En emisión · Español latino</strong><small>Añade anime actualmente en emisión con doblaje latino verificado en las fuentes del addon. Los datos se enriquecerán con MAL y TVDB.</small></span></label></div>
   </section>
-
   <section class="settings-section compact-section">
     <label class="toggle-row"><span class="toggle-copy"><strong>Incluir enlaces externos</strong><small>Permite mostrar enlaces que se abren en el navegador, además de los reproducibles en Stremio.</small></span><input type="checkbox" id="externalStreams" <%= config?.get("externalStreams") === "true" ? "checked" : "" %>><span class="toggle-ui"></span></label>
   </section>
-
+  <section class="settings-section credits-section">
+    <div class="section-heading"><span class="section-icon">©</span><div><h3>Créditos y atribuciones</h3><p>AnimeLatam es una adaptación independiente basada en el proyecto original:</p></div></div>
+    <div class="credits-card"><strong>AnimES Stremio addon</strong><a href="https://github.com/Pigamer37/animeflv-stremio-addon" target="_blank" rel="noopener noreferrer">github.com/Pigamer37/animeflv-stremio-addon ↗</a><small>Se conserva la licencia MIT y los avisos de copyright correspondientes al proyecto base. AnimeLatam incorpora modificaciones propias y no está afiliado a Stremio ni a los proveedores externos.</small></div>
+  </section>
   <section class="install-section">
     <div class="install-heading"><div><span class="eyebrow">LISTO PARA INSTALAR</span><h3>Tu configuración</h3></div><span class="live-badge">Actualización automática</span></div>
     <label for="manifest_url" class="url-label">URL del complemento</label>
@@ -37,37 +28,24 @@
     <div class="button-row"><button type="button" id="copyButton" class="secondary-button">Copiar enlace</button><a id="installLink" class="primary-button" href="#">＋ Añadir a Stremio</a></div>
     <p class="install-note">Después de cambiar las opciones, utiliza el nuevo enlace para instalar o actualizar AnimeLatam.</p>
   </section>
-  <footer class="config-footer">AnimeLatam <span>·</span> Anime en español latino</footer>
+  <footer class="config-footer">AnimeLatam <span>·</span> Fuentes de reproducción en español latino</footer>
 </main>
-
 <script>
 (() => {
-  const root = document;
-  const manifest = root.getElementById('manifest_url');
-  const install = root.getElementById('installLink');
+  const root = document, manifest = root.getElementById('manifest_url'), install = root.getElementById('installLink');
   const providers = ['animeav1','henaojara','latanime'];
-  const groups = ['stream-provider','catalog-provider'];
-  const getChecked = (selector) => [...root.querySelectorAll('.' + selector + ':checked')].map(el => el.value);
+  const getChecked = () => [...root.querySelectorAll('.catalog-provider:checked')].map(el => el.value);
   function updateLink() {
-    const params = new URLSearchParams();
-    const streams = getChecked('stream-provider');
-    const catalogs = getChecked('catalog-provider');
-    if (streams.length !== providers.length) params.set('streamProviders', streams.join(','));
+    const params = new URLSearchParams(), catalogs = getChecked();
     if (catalogs.length !== providers.length) params.set('catalogProviders', catalogs.join(','));
-    if (root.getElementById('onAirCatalogs').checked && catalogs.length) params.set('onAirCatalogs', catalogs.join(','));
+    if (root.getElementById('latinoOnAir').checked) params.set('latinoOnAir','true');
     if (root.getElementById('externalStreams').checked) params.set('externalStreams','true');
-    const path = params.toString();
-    const url = window.location.origin + (path ? '/' + path : '') + '/manifest.json';
-    manifest.value = url;
-    install.href = url.replace(/^https?:/,'stremio:');
+    const path = params.toString(), url = window.location.origin + (path ? '/' + path : '') + '/manifest.json';
+    manifest.value = url; install.href = url.replace(/^https?:/,'stremio:');
   }
-  root.querySelectorAll('.stream-provider,.catalog-provider,#onAirCatalogs,#externalStreams').forEach(el => el.addEventListener('change', updateLink));
-  root.querySelectorAll('[data-select]').forEach(btn => btn.addEventListener('click', () => {
-    root.querySelectorAll('.' + btn.dataset.select).forEach(el => el.checked = true); updateLink();
-  }));
-  root.querySelectorAll('[data-clear]').forEach(btn => btn.addEventListener('click', () => {
-    root.querySelectorAll('.' + btn.dataset.clear).forEach(el => el.checked = false); updateLink();
-  }));
+  root.querySelectorAll('.catalog-provider,#latinoOnAir,#externalStreams').forEach(el => el.addEventListener('change', updateLink));
+  root.querySelectorAll('[data-select]').forEach(btn => btn.addEventListener('click', () => { root.querySelectorAll('.' + btn.dataset.select).forEach(el => el.checked = true); updateLink(); }));
+  root.querySelectorAll('[data-clear]').forEach(btn => btn.addEventListener('click', () => { root.querySelectorAll('.' + btn.dataset.clear).forEach(el => el.checked = false); updateLink(); }));
   root.getElementById('copyButton').addEventListener('click', async () => {
     const button = root.getElementById('copyButton');
     try { await navigator.clipboard.writeText(manifest.value); button.textContent = '✓ Copiado'; }
