@@ -1,6 +1,6 @@
 {
   "name": "animelatam-stremio-addon",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Addon comunitario de Stremio que busca automáticamente fuentes de anime en español latino en AnimeAV1, Henaojara y Latanime.",
   "main": "index.js",
   "scripts": {
