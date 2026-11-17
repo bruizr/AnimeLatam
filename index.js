@@ -230,13 +230,7 @@ function ReadManifest() {
         //   id: "animeflv|onair", type: "AnimeFLV", name: "On Air"
         // },
         {
-          id: "animeav1|onair", type: "anime", name: "On Air"
-        },
-        {
-          id: "henaojara|onair", type: "anime", name: "On Air"
-        },
-        {
-          id: "latanime|onair", type: "anime", name: "On Air"
+          id: "latino-onair", type: "anime", name: "En emisión · Español latino"
         },
         // {
         //   id: "animejara|onair", type: "AnimeJara", name: "On Air"
@@ -303,9 +297,7 @@ function ReadManifest() {
 
 app.get("/manifest.json", (_req, res) => {
   ReadManifest().then((manif) => {
-    manif.catalogs = manif.catalogs.filter((cat) => {
-      return (!cat.id.includes("onair")) ? true : false
-    })
+    manif.catalogs = manif.catalogs.filter((cat) => cat.id !== "latino-onair")
     res.header('Cache-Control', "max-age=86400, stale-while-revalidate=86400, stale-if-error=259200")
     res.json(manif);
   }).catch((err) => {
@@ -319,11 +311,11 @@ app.get("/:config/manifest.json", (req, res) => {
     const catalogProviders = config.has("catalogProviders")
       ? config.get("catalogProviders").split(',').filter(Boolean)
       : ["animeav1", "henaojara", "latanime"]
-    const onAirProviders = config.get("onAirCatalogs")?.split(',').filter(Boolean) || []
+    const includeLatinoOnAir = config.get("latinoOnAir") === "true"
     manif.catalogs = manif.catalogs.filter((cat) => {
+      if (cat.id === "latino-onair") return includeLatinoOnAir
       const provider = cat.id.split("|")[0]
       if (["animeav1", "henaojara", "latanime"].includes(provider) && !catalogProviders.includes(provider)) return false
-      if (cat.id.includes("onair")) return onAirProviders.includes(provider)
       return true
     })
     res.header('Cache-Control', "max-age=86400, stale-while-revalidate=86400, stale-if-error=259200")
