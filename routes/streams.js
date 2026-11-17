@@ -42,6 +42,9 @@ function HandleLongStreamRequest(req, res, next) {
 function HandleStreamRequest(req, res, next) {
   console.log(`\x1b[96mEntered HandleStreamRequest with\x1b[39m ${req.originalUrl}`)
   const onlyInternal = (res.locals.config?.get("externalStreams") != 'true')
+  const configuredProviders = res.locals.config?.has("streamProviders")
+    ? res.locals.config.get("streamProviders").split(',').filter(Boolean)
+    : ["animeav1", "henaojara", "latanime"]
   let streams = []
   const idDetails = req.params.videoId.split(':')
   const videoID = idDetails[0] //We only want the first part of the videoID, which is the IMDB ID, the rest would be the season and episode
@@ -174,7 +177,13 @@ function HandleStreamRequest(req, res, next) {
         console.log('\x1b[36mGot Henaojara entry:\x1b[39m', result.title)
         return henaojaraAPI.GetItemStreams(result.slug, onlyInternal, episode)
       })) : Promise.resolve([])
-      return Promise.allSettled([animeAV1p, henaojarap]).then((results) => results.flatMap((result) => result.status === "fulfilled" ? result.value : []))
+      const latanimep = configuredProviders.includes("latanime") ? firstMatch((searchTerm) => latanimeAPI.SearchLatanime(searchTerm, req.params.type).then(notSpecial).then((items) => {
+        const result = fuzzysort.go(searchTerm, items, {key: 'title', limit: 1, threshold: .5})[0]?.obj
+        if (!result) throw Error('No search results!')
+        console.log('\x1b[36mGot Latanime entry:\x1b[39m', result.title)
+        return latanimeAPI.GetItemStreams(result.slug, onlyInternal, episode)
+      })) : Promise.resolve([])
+      return Promise.allSettled([animeAV1p, henaojarap, latanimep]).then((results) => results.flatMap((result) => result.status === "fulfilled" ? result.value : []))
     })).then((foundStreams) => {
       if (!res.headersSent) {
         res.header('Cache-Control', foundStreams.length ? CLIENT_CACHE.streams : CLIENT_CACHE.failure)
