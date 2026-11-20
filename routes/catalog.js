@@ -54,7 +54,7 @@ function HandleCatalogRequest(req, res, next) {
         return result.map((anime) => {
           return {
             id: `animeav1:${anime.slug}`,
-            type: anime.type,
+            type: "anime",
             name: anime.title,
             poster: anime.poster,
             description: anime.overview,
@@ -68,7 +68,7 @@ function HandleCatalogRequest(req, res, next) {
         return result.map((anime) => {
           return {
             id: `animeav1:${anime.slug}`,
-            type: anime.type,
+            type: "anime",
             name: anime.title,
             poster: anime.poster,
             description: anime.overview,
@@ -91,7 +91,7 @@ function HandleCatalogRequest(req, res, next) {
         return result.map((anime) => {
           return {
             id: `henaojara:${anime.slug}`,
-            type: anime.type,
+            type: "anime",
             name: anime.title,
             poster: anime.poster,
             description: anime.overview,
@@ -105,7 +105,7 @@ function HandleCatalogRequest(req, res, next) {
         return result.map((anime) => {
           return {
             id: `henaojara:${anime.slug}`,
-            type: anime.type,
+            type: "anime",
             name: anime.title,
             poster: anime.poster,
             description: anime.overview,
@@ -128,7 +128,7 @@ function HandleCatalogRequest(req, res, next) {
         return result.map((anime) => {
           return {
             id: `latanime:${anime.slug}`,
-            type: anime.type,
+            type: "anime",
             name: anime.title,
             poster: anime.poster,
             description: anime.overview,
@@ -142,7 +142,7 @@ function HandleCatalogRequest(req, res, next) {
         return result.map((anime) => {
           return {
             id: `latanime:${anime.slug}`,
-            type: anime.type,
+            type: "anime",
             name: anime.title,
             poster: anime.poster,
             description: anime.overview,
