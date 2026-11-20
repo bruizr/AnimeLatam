@@ -33,9 +33,17 @@ function ReadManifest() {
       "logo": "https://raw.githubusercontent.com/bruizr/AnimeLatam/main/views/AnimeLatam.svg",
       "background": "https://images6.alphacoders.com/113/1135890.jpg",
       "description": packageJSON.description,
-      "catalogs": [],
+      "catalogs": [
+        { id: "animeav1", type: "anime", name: "AnimeAV1", extra: [{ name: "search", isRequired: true }, { name: "skip", isRequired: false }] },
+        { id: "henaojara", type: "anime", name: "Henaojara", extra: [{ name: "search", isRequired: true }, { name: "skip", isRequired: false }] },
+        { id: "latanime", type: "anime", name: "Latanime", extra: [{ name: "search", isRequired: true }, { name: "skip", isRequired: false }] },
+        { id: "animeav1|onair", type: "anime", name: "AnimeAV1 · En emisión" },
+        { id: "henaojara|onair", type: "anime", name: "Henaojara · En emisión" },
+        { id: "latanime|onair", type: "anime", name: "Latanime · En emisión" }
+      ],
       "resources": [
         "stream",
+        "catalog",
         { name: "meta", types: ["movie", "series", "anime", "other"], idPrefixes: ["animeav1:", "henaojara:", "latanime:", "anilist:", "mal:", "anidb:"] }
       ],
       "types": [
@@ -107,6 +115,9 @@ app.use(streams);
 
 const meta = require("./routes/meta");
 app.use(meta);
+
+const catalog = require("./routes/catalog");
+app.use(catalog);
 
 
 function startLocalServer() {
